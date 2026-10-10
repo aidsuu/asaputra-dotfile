@@ -73,8 +73,9 @@ else
 fi
 
 if gnome-extensions info dash-to-panel@jderose9.github.com >/dev/null 2>&1; then
-    dconf write /org/gnome/shell/extensions/dash-to-panel/panel-lengths "'{\"CMN-0x00000000\":92,\"SAM-0x00000000\":92}'"
+    dconf write /org/gnome/shell/extensions/dash-to-panel/panel-lengths "'{\"CMN-0x00000000\":-1,\"SAM-0x00000000\":-1}'"
     dconf write /org/gnome/shell/extensions/dash-to-panel/panel-sizes "'{\"CMN-0x00000000\":48,\"SAM-0x00000000\":48}'"
+    dconf write /org/gnome/shell/extensions/dash-to-panel/global-border-radius '5'
     dconf write /org/gnome/shell/extensions/dash-to-panel/panel-top-bottom-margins '12'
     dconf write /org/gnome/shell/extensions/dash-to-panel/panel-side-margins '0'
     dconf write /org/gnome/shell/extensions/dash-to-panel/appicon-padding '8'

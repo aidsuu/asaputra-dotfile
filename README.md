@@ -1,6 +1,6 @@
 # Blue Ocean · Debian GNOME dotfiles
 
-Tema minimalis gelap untuk Debian 13 + GNOME 48. Versi 2 memakai wallpaper samudra, panel bawah mengambang, serta permukaan biru gelap yang konsisten pada menu, quick settings, kalender, pencarian, dan notifikasi.
+Tema minimalis gelap untuk Debian 13 + GNOME 48. Versi 2 memakai wallpaper samudra, dock bawah mengambang yang menyesuaikan isi, serta permukaan biru gelap yang konsisten pada menu, quick settings, kalender, pencarian, dan notifikasi.
 
 ## Isi
 
