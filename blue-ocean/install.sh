@@ -73,29 +73,18 @@ else
     echo 'User Themes tidak ada; gaya GNOME Shell dilewati.'
 fi
 
-if gnome-extensions info dash-to-panel@jderose9.github.com >/dev/null 2>&1; then
-    dconf write /org/gnome/shell/extensions/dash-to-panel/panel-lengths "'{\"CMN-0x00000000\":-1,\"SAM-0x00000000\":-1}'"
-    dconf write /org/gnome/shell/extensions/dash-to-panel/panel-sizes "'{\"CMN-0x00000000\":36,\"SAM-0x00000000\":36}'"
-    dconf write /org/gnome/shell/extensions/dash-to-panel/global-border-radius '4'
-    dconf write /org/gnome/shell/extensions/dash-to-panel/panel-top-bottom-margins '8'
-    dconf write /org/gnome/shell/extensions/dash-to-panel/panel-side-margins '0'
-    dconf write /org/gnome/shell/extensions/dash-to-panel/appicon-padding '3'
-    dconf write /org/gnome/shell/extensions/dash-to-panel/show-apps-icon-side-padding '2'
-    dconf write /org/gnome/shell/extensions/dash-to-panel/status-icon-padding '2'
-    dconf write /org/gnome/shell/extensions/dash-to-panel/trans-use-custom-opacity 'true'
-    dconf write /org/gnome/shell/extensions/dash-to-panel/trans-panel-opacity '0.90'
-    dconf write /org/gnome/shell/extensions/dash-to-panel/trans-use-border 'true'
-    dconf write /org/gnome/shell/extensions/dash-to-panel/trans-border-width '1'
-    dconf write /org/gnome/shell/extensions/dash-to-panel/trans-border-use-custom-color 'true'
-    dconf write /org/gnome/shell/extensions/dash-to-panel/trans-border-custom-color "'rgba(114,203,227,0.34)'"
-    dconf write /org/gnome/shell/extensions/dash-to-panel/dot-style-focused "'DOTS'"
-    dconf write /org/gnome/shell/extensions/dash-to-panel/dot-style-unfocused "'DOTS'"
-    dconf write /org/gnome/shell/extensions/dash-to-panel/dot-color-override 'true'
-    for count in 1 2 3 4; do
-        dconf write "/org/gnome/shell/extensions/dash-to-panel/dot-color-$count" "'#72cde8'"
-    done
-else
-    echo 'Dash to Panel tidak ada; setelan panel dilewati.'
+if command -v gnome-extensions >/dev/null && \
+   gnome-extensions info dash-to-panel@jderose9.github.com >/dev/null 2>&1; then
+    if [[ ! -e "$backup/dash-to-panel.enabled" && ! -e "$backup/dash-to-panel.disabled" ]]; then
+        if gnome-extensions list --enabled | grep -Fxq 'dash-to-panel@jderose9.github.com'; then
+            touch "$backup/dash-to-panel.enabled"
+        else
+            touch "$backup/dash-to-panel.disabled"
+        fi
+    fi
+    dconf reset -f /org/gnome/shell/extensions/dash-to-panel/
+    dconf load /org/gnome/shell/extensions/dash-to-panel/ < "$backup/dash-to-panel.dconf"
+    gnome-extensions disable dash-to-panel@jderose9.github.com
 fi
 
 if "$first_install"; then

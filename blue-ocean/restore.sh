@@ -18,6 +18,15 @@ for entry in \
     dconf load "$path" < "$backup/$name.dconf"
 done
 
+if command -v gnome-extensions >/dev/null && \
+   gnome-extensions info dash-to-panel@jderose9.github.com >/dev/null 2>&1; then
+    if [[ -e "$backup/dash-to-panel.enabled" ]]; then
+        gnome-extensions enable dash-to-panel@jderose9.github.com
+    elif [[ -e "$backup/dash-to-panel.disabled" ]]; then
+        gnome-extensions disable dash-to-panel@jderose9.github.com
+    fi
+fi
+
 restore_file() {
     local name="$1" target="$2"
     rm -rf -- "$target"

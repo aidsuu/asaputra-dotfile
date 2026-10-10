@@ -1,6 +1,6 @@
 # Blue Ocean · Debian GNOME dotfiles
 
-Tema minimalis gelap untuk Debian 13 + GNOME 48. Versi 2 memakai wallpaper samudra, dock bawah mengambang berukuran 36 px yang menyesuaikan isi, jarak ikon rapat, jam tanpa tanggal, serta permukaan biru gelap yang konsisten pada menu, quick settings, kalender, pencarian, dan notifikasi.
+Tema minimalis gelap untuk Debian 13 + GNOME 48. Memakai wallpaper samudra, panel atas GNOME yang tenang tanpa dock permanen, serta permukaan biru gelap yang konsisten pada menu, quick settings, kalender, pencarian, dan notifikasi. Aplikasi dapat dibuka dari Overview dengan tombol Super.
 
 ## Isi
 
@@ -30,6 +30,6 @@ Pemulihan memakai snapshot terbaru yang dibuat saat pemasangan. Jika Anda mengub
 
 ## Perangkat lunak
 
-GNOME Shell 48, `gsettings`, `dconf`, User Themes, Dash to Panel, dan Kitty. Installer akan melewati bagian ekstensi atau Kitty yang tidak ada. Pillow hanya dibutuhkan untuk membuat ulang wallpaper awal, bukan untuk memasang tema.
+GNOME Shell 48, `gsettings`, `dconf`, User Themes, dan Kitty. Installer menonaktifkan Dash to Panel bila tersedia; `restore.sh` mengembalikan status awalnya. Bagian ekstensi atau Kitty yang tidak ada akan dilewati. Pillow hanya dibutuhkan untuk membuat ulang wallpaper awal, bukan untuk memasang tema.
 
-Dasar teknis: [tema Shell GNOME 48](https://github.com/varunbpatil/Darkwaita) dan [pengaturan Dash to Panel](https://github.com/home-sweet-gnome/dash-to-panel/wiki/Enable-and-Customize). Blue Ocean memakai palet, bentuk, dan aset sendiri.
+Dasar teknis: [tema Shell GNOME 48](https://github.com/varunbpatil/Darkwaita). Blue Ocean memakai palet, bentuk, dan aset sendiri.
