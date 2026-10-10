@@ -2,6 +2,28 @@
 set -euo pipefail
 
 root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+scheme="${1:-blue-ocean}"
+case "$scheme" in
+    blue-ocean)
+        theme_root="$root"
+        shell_theme=Blue-Ocean
+        gtk_theme=Colloid-Dark-Compact-Nord
+        accent=blue
+        cursor=Bibata-Material-Deep-Blue
+        wallpaper_source="$theme_root/wallpaper/blue-ocean-v2.png"
+        wallpaper_target="$HOME/.local/share/backgrounds/blue-ocean.png"
+        ;;
+    sakura)
+        theme_root="$root/../sakura"
+        shell_theme=Sakura
+        gtk_theme=Colloid-Pink-Dark-Compact
+        accent=pink
+        cursor=Bibata-Material-Pink-Pastel
+        wallpaper_source="$theme_root/wallpaper/sakura-dusk.png"
+        wallpaper_target="$HOME/.local/share/backgrounds/sakura.png"
+        ;;
+    *) echo "Unknown color scheme: $scheme" >&2; exit 1 ;;
+esac
 state="${XDG_STATE_HOME:-$HOME/.local/state}/blue-ocean-gnome"
 mkdir -p "$state/backups"
 if [[ -f "$state/latest" ]] && [[ -d "$(< "$state/latest")" ]]; then
@@ -15,8 +37,8 @@ fi
 for app in gsettings dconf; do
     command -v "$app" >/dev/null || { echo "Missing required command: $app" >&2; exit 1; }
 done
-[[ "$(gnome-shell --version)" == *' 48.'* ]] || { echo 'Blue Ocean requires GNOME Shell 48.' >&2; exit 1; }
-[[ -f "$root/wallpaper/blue-ocean-v2.png" ]] || { echo 'Blue Ocean wallpaper is missing.' >&2; exit 1; }
+[[ "$(gnome-shell --version)" == *' 48.'* ]] || { echo 'This setup requires GNOME Shell 48.' >&2; exit 1; }
+[[ -f "$wallpaper_source" ]] || { echo "$scheme wallpaper is missing." >&2; exit 1; }
 mkdir -p "$HOME/.themes" "$HOME/.local/share/backgrounds" "$HOME/.config/kitty" "$HOME/.config/fastfetch" "$HOME/.config/blue-ocean"
 
 if "$first_install"; then
@@ -68,18 +90,21 @@ backup_file fastfetch "$HOME/.config/fastfetch/config.jsonc"
 backup_file bashrc "$HOME/.bashrc"
 backup_file prompt "$HOME/.config/blue-ocean/prompt.bash"
 backup_file colloid-theme "$HOME/.themes/Colloid-Dark-Compact-Nord"
+backup_file sakura-theme "$HOME/.themes/Sakura"
+backup_file sakura-wallpaper "$HOME/.local/share/backgrounds/sakura.png"
+backup_file colloid-pink-theme "$HOME/.themes/Colloid-Pink-Dark-Compact"
 backup_file gtk4-css "$HOME/.config/gtk-4.0/gtk.css"
 backup_file gtk4-dark-css "$HOME/.config/gtk-4.0/gtk-dark.css"
 backup_file gtk4-assets "$HOME/.config/gtk-4.0/assets"
-"$root/install-gtk.sh"
-rm -rf -- "$HOME/.themes/Blue-Ocean"
-cp -a -- "$root/theme" "$HOME/.themes/Blue-Ocean"
-cp -- "$root/wallpaper/blue-ocean-v2.png" "$HOME/.local/share/backgrounds/blue-ocean.png"
+"$root/install-gtk.sh" "$scheme"
+rm -rf -- "$HOME/.themes/$shell_theme"
+cp -a -- "$theme_root/theme" "$HOME/.themes/$shell_theme"
+cp -- "$wallpaper_source" "$wallpaper_target"
 if command -v kitty >/dev/null; then
-    cp -- "$root/kitty/kitty.conf" "$HOME/.config/kitty/kitty.conf"
+    cp -- "$theme_root/kitty/kitty.conf" "$HOME/.config/kitty/kitty.conf"
 fi
-cp -- "$root/fastfetch/config.jsonc" "$HOME/.config/fastfetch/config.jsonc"
-cp -- "$root/shell/prompt.bash" "$HOME/.config/blue-ocean/prompt.bash"
+cp -- "$theme_root/fastfetch/config.jsonc" "$HOME/.config/fastfetch/config.jsonc"
+cp -- "$theme_root/shell/prompt.bash" "$HOME/.config/blue-ocean/prompt.bash"
 python3 - "$HOME/.bashrc" <<'PY'
 from pathlib import Path
 import sys
@@ -99,22 +124,21 @@ path.write_text(content)
 PY
 
 gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
-gsettings set org.gnome.desktop.interface accent-color 'blue'
-gsettings set org.gnome.desktop.interface gtk-theme 'Colloid-Dark-Compact-Nord'
+gsettings set org.gnome.desktop.interface accent-color "$accent"
+gsettings set org.gnome.desktop.interface gtk-theme "$gtk_theme"
 gsettings set org.gnome.desktop.interface icon-theme 'Papirus-Dark'
-gsettings set org.gnome.desktop.interface cursor-theme 'Bibata-Material-Deep-Blue'
+gsettings set org.gnome.desktop.interface cursor-theme "$cursor"
 gsettings set org.gnome.desktop.interface font-name 'Cantarell 11'
 gsettings set org.gnome.desktop.interface monospace-font-name 'Noto Sans Mono 11'
 gsettings set org.gnome.desktop.interface clock-show-date false
-wallpaper_uri="file://$HOME/.local/share/backgrounds/blue-ocean.png"
-gsettings set org.gnome.desktop.background picture-uri-dark "file://$root/wallpaper/blue-ocean-v2.png"
+wallpaper_uri="file://$wallpaper_target"
 gsettings set org.gnome.desktop.background picture-uri "$wallpaper_uri"
 gsettings set org.gnome.desktop.background picture-uri-dark "$wallpaper_uri"
 gsettings set org.gnome.desktop.screensaver picture-uri "$wallpaper_uri"
 
 if gnome-extensions info user-theme@gnome-shell-extensions.gcampax.github.com >/dev/null 2>&1; then
     dconf write /org/gnome/shell/extensions/user-theme/name "''"
-    dconf write /org/gnome/shell/extensions/user-theme/name "'Blue-Ocean'"
+    dconf write /org/gnome/shell/extensions/user-theme/name "'$shell_theme'"
 else
     echo 'User Themes is unavailable; skipping GNOME Shell styling.'
 fi
@@ -127,6 +151,17 @@ dconf write "$blur/dash-to-dock/override-background" 'false'
 dconf write "$blur/overview/blur" 'true'
 
 bar=/org/gnome/shell/extensions/openbar
+if [[ "$scheme" == sakura ]]; then
+    bar_iscolor="['0.11', '0.075', '0.13']"
+    bar_fgcolor="['0.95', '0.89', '0.92']"
+    bar_bcolor="['0.77', '0.50', '0.62']"
+    bar_hcolor="['0.55', '0.28', '0.42']"
+else
+    bar_iscolor="['0.035', '0.125', '0.195']"
+    bar_fgcolor="['0.92', '0.98', '1.0']"
+    bar_bcolor="['0.38', '0.75', '0.88']"
+    bar_hcolor="['0.25', '0.67', '0.83']"
+fi
 dconf write "$bar/bartype" "'Islands'"
 dconf write "$bar/position" "'Top'"
 dconf write "$bar/height" '32.0'
@@ -135,32 +170,31 @@ dconf write "$bar/set-bottom-margin" 'false'
 dconf write "$bar/set-overview" 'true'
 dconf write "$bar/set-fullscreen" 'false'
 dconf write "$bar/bgalpha" '0.0'
-dconf write "$bar/iscolor" "['0.035', '0.125', '0.195']"
-dconf write "$bar/dark-iscolor" "['0.035', '0.125', '0.195']"
+dconf write "$bar/iscolor" "$bar_iscolor"
+dconf write "$bar/dark-iscolor" "$bar_iscolor"
 dconf write "$bar/isalpha" '0.79'
-dconf write "$bar/fgcolor" "['0.92', '0.98', '1.0']"
-dconf write "$bar/dark-fgcolor" "['0.92', '0.98', '1.0']"
-dconf write "$bar/bcolor" "['0.38', '0.75', '0.88']"
-dconf write "$bar/dark-bcolor" "['0.38', '0.75', '0.88']"
+dconf write "$bar/fgcolor" "$bar_fgcolor"
+dconf write "$bar/dark-fgcolor" "$bar_fgcolor"
+dconf write "$bar/bcolor" "$bar_bcolor"
+dconf write "$bar/dark-bcolor" "$bar_bcolor"
 dconf write "$bar/balpha" '0.55'
 dconf write "$bar/bwidth" '1.0'
 dconf write "$bar/bradius" '18.0'
 dconf write "$bar/neon" 'false'
 dconf write "$bar/shadow" 'true'
 dconf write "$bar/shalpha" '0.24'
-dconf write "$bar/hcolor" "['0.25', '0.67', '0.83']"
-dconf write "$bar/dark-hcolor" "['0.25', '0.67', '0.83']"
+dconf write "$bar/hcolor" "$bar_hcolor"
+dconf write "$bar/dark-hcolor" "$bar_hcolor"
 dconf write "$bar/halpha" '0.27'
 dconf write "$bar/hpad" '2.0'
 dconf write "$bar/vpad" '2.0'
 dconf write "$bar/menustyle" 'false'
 dconf write "$bar/autotheme-refresh" 'false'
 
-# Keep borders exclusive to Kitty. The vivid edge tracks the active window.
+# Keep borders exclusive to Kitty. The edge tracks the active window.
 p7_schema="$HOME/.local/share/gnome-shell/extensions/p7-borders@prasannavl.com/schemas"
-python3 - "$p7_schema" <<'PY'
+python3 - "$p7_schema" "$scheme" <<'PY'
 import json
-from pathlib import Path
 import sys
 import gi
 from gi.repository import Gio
@@ -172,14 +206,20 @@ if schema is None:
 settings = Gio.Settings.new_full(schema, None, None)
 settings.set_boolean('default-enabled', False)
 settings.set_boolean('use-shipped-configs', False)
+if sys.argv[2] == 'sakura':
+    active = 'rgba(190, 133, 158, 0.78)'
+    inactive = 'rgba(125, 83, 108, 0.34)'
+else:
+    active = 'rgba(96, 176, 205, 0.76)'
+    inactive = 'rgba(64, 115, 137, 0.32)'
 settings.set_string('rules', json.dumps({
     'class:kitty': {
         'enabled': True,
         'width': 2,
         'margins': 1,
         'radius': 14,
-        'activeColor': 'rgba(96, 176, 205, 0.76)',
-        'inactiveColor': 'rgba(64, 115, 137, 0.32)',
+        'activeColor': active,
+        'inactiveColor': inactive,
     },
 }, separators=(',', ':')))
 PY
@@ -214,5 +254,6 @@ fi
 if "$first_install"; then
     printf '%s\n' "$backup" > "$state/latest"
 fi
-echo "Blue Ocean installed. Backup: $backup"
+printf '%s\n' "$scheme" > "$state/current"
+echo "$shell_theme installed. Backup: $backup"
 echo 'Sign out and back in if Open Bar does not appear immediately on GNOME Wayland.'

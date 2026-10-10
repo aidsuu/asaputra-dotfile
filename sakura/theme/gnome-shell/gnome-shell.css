@@ -1,0 +1,217 @@
+/* Sakura for GNOME Shell 48.
+ * Keep the complete GNOME stylesheet underneath so dialogs, OSDs and
+ * extension widgets retain their expected layout and interaction states. */
+@import url("resource:///org/gnome/shell/theme/gnome-shell-dark.css");
+
+stage {
+  color: #f2e5ec;
+}
+
+/* Open Bar owns the island panel; this stylesheet styles Shell surfaces below it. */
+
+/* Menus and popovers use a layered plum glass surface. */
+.popup-menu-content,
+.candidate-popup-content,
+.quick-settings,
+.calendar,
+.modal-dialog,
+.quick-toggle-menu {
+  background-color: rgba(29, 21, 35, 0.98) !important;
+  border: 1px solid rgba(194, 136, 163, 0.23) !important;
+  border-radius: 22px !important;
+  box-shadow: 0 18px 48px rgba(9, 5, 14, 0.48) !important;
+  color: #f2e5ec !important;
+}
+
+.popup-menu-item {
+  border-radius: 12px !important;
+  color: #e8d4df !important;
+}
+
+.popup-menu-item:hover,
+.popup-menu-item:checked,
+.popup-menu-item:active,
+.popup-menu-item:selected {
+  background-color: rgba(147, 82, 113, 0.25) !important;
+  color: #ffffff !important;
+}
+
+.popup-separator-menu-item .popup-separator-menu-item-separator {
+  background-color: rgba(184, 129, 154, 0.19) !important;
+}
+
+/* Quick settings: quiet cards, soft rose active state. */
+.quick-settings {
+  padding: 18px !important;
+}
+
+.quick-settings-grid {
+  spacing-rows: 11px;
+  spacing-columns: 11px;
+}
+
+.quick-toggle,
+.quick-toggle-has-menu .quick-toggle,
+.quick-toggle-has-menu .quick-toggle-menu-button,
+.quick-slider .slider-bin {
+  background-color: #39293c !important;
+  color: #efdee7 !important;
+  border: 1px solid rgba(192, 145, 169, 0.12) !important;
+}
+
+.quick-toggle {
+  border-radius: 15px !important;
+}
+
+.quick-toggle-has-menu .quick-toggle:ltr {
+  border-radius: 15px 0 0 15px !important;
+}
+
+.quick-toggle-has-menu .quick-toggle-menu-button:ltr {
+  border-radius: 0 15px 15px 0 !important;
+}
+
+.quick-toggle:hover,
+.quick-toggle-has-menu .quick-toggle-menu-button:hover,
+.quick-slider .slider-bin:hover {
+  background-color: #54354c !important;
+}
+
+.quick-toggle:checked,
+.quick-toggle-has-menu .quick-toggle:checked,
+.quick-toggle-has-menu .quick-toggle-menu-button:checked {
+  background-color: #92536f !important;
+  color: #ffffff !important;
+  border-color: #c18da7 !important;
+}
+
+.quick-toggle .quick-toggle-subtitle {
+  color: #c9aeba !important;
+}
+
+/* Calendar and notifications. */
+.datemenu-today-button,
+.events-button,
+.world-clocks-button,
+.weather-button,
+.message {
+  background-color: #36263a !important;
+  border: 1px solid rgba(175, 118, 149, 0.12) !important;
+  border-radius: 16px !important;
+}
+
+.datemenu-today-button:hover,
+.events-button:hover,
+.world-clocks-button:hover,
+.weather-button:hover {
+  background-color: #4c3148 !important;
+}
+
+.calendar .calendar-month-header .calendar-month-label {
+  color: #d9a9bd !important;
+}
+
+.calendar .calendar-day.calendar-today {
+  background-color: #92536f !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 0 2px rgba(215, 158, 181, 0.22) !important;
+}
+
+.calendar .calendar-day:hover,
+.calendar .calendar-day:focus {
+  background-color: rgba(173, 103, 137, 0.24) !important;
+}
+
+.message-list {
+  border-color: rgba(174, 124, 151, 0.18) !important;
+}
+
+.message .message-header,
+.message-list .message-list-placeholder {
+  color: #c6aab8 !important;
+}
+
+.notification-banner {
+  background-color: rgba(38, 25, 42, 0.98) !important;
+  border: 1px solid rgba(200, 136, 166, 0.29) !important;
+  border-radius: 17px !important;
+  box-shadow: 0 12px 36px rgba(9, 5, 14, 0.43) !important;
+}
+
+/* Search and app overview. */
+.search-entry {
+  background-color: rgba(29, 21, 35, 0.97) !important;
+  border: 1px solid rgba(203, 143, 171, 0.40) !important;
+  border-radius: 17px !important;
+  color: #f5e9ee !important;
+  box-shadow: 0 8px 28px rgba(13, 6, 18, 0.28) !important;
+}
+
+.search-entry:focus {
+  border-color: #d9a6bd !important;
+  box-shadow: inset 0 0 0 1px rgba(221, 164, 189, 0.50) !important;
+}
+
+.search-section-content {
+  background-color: rgba(36, 24, 41, 0.94) !important;
+  border: 1px solid rgba(185, 130, 158, 0.14) !important;
+  border-radius: 20px !important;
+  color: #f2e5ec !important;
+}
+
+.overview-tile,
+.grid-search-result,
+.list-search-result {
+  color: #f2e4eb !important;
+  border-radius: 17px !important;
+}
+
+.overview-tile:hover,
+.grid-search-result:hover,
+.list-search-result:hover,
+.overview-tile:focus,
+.grid-search-result:focus,
+.list-search-result:focus {
+  background-color: rgba(143, 79, 112, 0.25) !important;
+  box-shadow: inset 0 0 0 1px rgba(194, 139, 164, 0.22) !important;
+}
+
+.dash-background,
+#dash .dash-background {
+  background-color: rgba(29, 21, 35, 0.87) !important;
+  border: 1px solid rgba(190, 131, 160, 0.23) !important;
+  border-radius: 19px !important;
+  box-shadow: 0 10px 30px rgba(12, 5, 17, 0.35) !important;
+}
+
+.workspace-thumbnail-indicator {
+  border-color: #c990aa !important;
+  border-radius: 13px !important;
+}
+
+.blue-ocean-window-border {
+  box-shadow: 0 0 9px 1px rgba(166, 105, 136, 0.20) !important;
+}
+
+/* Other Shell surfaces keep the same palette. */
+.osd-window,
+.switcher-list,
+.run-dialog,
+.end-session-dialog,
+.screenshot-ui-panel {
+  background-color: rgba(29, 21, 35, 0.97) !important;
+  border: 1px solid rgba(194, 136, 163, 0.23) !important;
+  border-radius: 20px !important;
+  color: #f2e5ec !important;
+  box-shadow: 0 18px 48px rgba(9, 5, 14, 0.43) !important;
+}
+
+.button,
+.icon-button {
+  border-radius: 12px !important;
+}
+
+.button:focus,
+.icon-button:focus {
+  box-shadow: inset 0 0 0 2px rgba(202, 145, 172, 0.55) !important;
+}

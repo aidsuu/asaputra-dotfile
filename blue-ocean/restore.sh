@@ -52,6 +52,16 @@ restore_file theme "$HOME/.themes/Blue-Ocean"
 restore_file wallpaper "$HOME/.local/share/backgrounds/blue-ocean.png"
 restore_file kitty.conf "$HOME/.config/kitty/kitty.conf"
 for entry in \
+    "sakura-theme:$HOME/.themes/Sakura" \
+    "sakura-wallpaper:$HOME/.local/share/backgrounds/sakura.png" \
+    "colloid-pink-theme:$HOME/.themes/Colloid-Pink-Dark-Compact"; do
+    name="${entry%%:*}"
+    target="${entry#*:}"
+    if [[ -e "$backup/$name" || -e "$backup/$name.absent" ]]; then
+        restore_file "$name" "$target"
+    fi
+done
+for entry in \
     "fastfetch:$HOME/.config/fastfetch/config.jsonc" \
     "bashrc:$HOME/.bashrc" \
     "prompt:$HOME/.config/blue-ocean/prompt.bash"; do
@@ -87,4 +97,5 @@ for entry in \
     fi
 done
 echo "Settings restored from $backup"
+rm -f -- "$state/current"
 echo 'Sign out and back in if the Shell appearance has not fully changed.'

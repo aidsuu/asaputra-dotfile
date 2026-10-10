@@ -1,52 +1,39 @@
-<h1 align="center">BLUE OCEAN</h1>
+<h1 align="center">ASAPUTRA / GNOME</h1>
 
-<p align="center">A quiet GNOME desktop with deep blues, soft light, and room to breathe.</p>
+<p align="center">Two calm looks for a Debian GNOME desktop.</p>
 <p align="center"><code>Debian 13</code> · <code>GNOME 48</code> · <code>Wayland</code> · <code>Kitty</code></p>
 
-<p align="center">
-  <img src="blue-ocean/wallpaper/blue-ocean-v2.png" alt="Blue Ocean wallpaper showing illuminated waves at night" width="920">
-</p>
+| Blue Ocean | Sakura |
+| :---: | :---: |
+| Deep navy, muted cyan, and moonlit water | Dark plum, dusty rose, and cherry blossoms at dusk |
+| <img src="blue-ocean/wallpaper/blue-ocean-v2.png" alt="Blue Ocean wallpaper" width="440"> | <img src="sakura/wallpaper/sakura-dusk.png" alt="Sakura wallpaper" width="440"> |
 
-## The setup
+Both schemes keep the same slim island bar and dock-free desktop. Press `Super` for the app overview. Each scheme coordinates the wallpaper, GNOME Shell, Colloid GTK, Kitty, Bash prompt, Fastfetch, cursor, and Kitty window outline. The Kitty outline stays subtle and follows focus.
 
-| Layer | Design |
-| --- | --- |
-| Desktop | An original ocean wallpaper, a slim island-style top bar, and no persistent dock. Press `Super` for the app overview. |
-| Applications | Colloid Nord Dark Compact for GTK 3 and GTK 4, with Papirus-Dark icons and a blue accent. |
-| Terminal | A frameless Kitty window with a dimmed ocean background, clear text, and a soft blue outline that brightens on focus. |
-| Shell | Blue Ocean menus, quick settings, search, and notifications; a softly blurred overview. |
-
-## Install
+## Install and switch
 
 ```bash
 git clone https://github.com/aidsuu/asaputra-dotfile.git
 cd asaputra-dotfile
-./blue-ocean/install.sh
+./blue-ocean/install.sh  # Blue Ocean
+./sakura/install.sh      # Sakura
 ```
 
-The installer saves the original settings in `~/.local/state/blue-ocean-gnome/backups/` before changing them. Re-running it keeps that original backup. Everything is installed in the user account; Debian amd64 does not require `sudo`. The build downloads pinned sources and Debian packages, so an internet connection is required. If Open Bar does not appear immediately, sign out and back in.
+Run either installer again to switch schemes. Both use one original-settings backup at `~/.local/state/blue-ocean-gnome/backups/`, so switching does not replace your pre-install snapshot. The installer runs in your user account; Debian amd64 does not require `sudo`. It downloads pinned sources and Debian packages, so an internet connection is required. Sign out and back in if a newly installed GNOME extension does not appear immediately.
 
-## Restore
+## Restore your original desktop
 
 ```bash
 ./blue-ocean/restore.sh
 ```
 
-This restores the saved desktop settings, GTK files, extensions, Kitty configuration, Fastfetch configuration, and `.bashrc`. Changes made to those same files after installation will be replaced by the backup.
+`./sakura/restore.sh` does the same thing. Restore puts back the saved desktop settings, GTK files, extensions, Kitty configuration, Fastfetch configuration, and `.bashrc`. Changes made to those same files after installation will be replaced by the backup.
 
-## What's inside
+## Files
 
 ```text
-blue-ocean/
-├── wallpaper/            ocean artwork
-├── theme/gnome-shell/    Shell styling
-├── kitty/                terminal appearance
-├── fastfetch/            compact system summary
-├── shell/                Bash prompt
-├── install-components.sh pinned GNOME extensions and Papirus icons
-├── install-gtk.sh        Colloid GTK build
-├── install.sh            apply the desktop
-└── restore.sh            restore the saved setup
+blue-ocean/  Blue Ocean artwork, colors, and shared installer
+sakura/      Sakura artwork, colors, and installer wrapper
 ```
 
-The installer verifies SHA-256 checksums for [Open Bar](https://github.com/neuromorph/openbar), [Blur My Shell](https://github.com/aunetx/blur-my-shell), [P7 Borders](https://github.com/prasannavl/p7-borders-shell-extension), [Papirus](https://github.com/PapirusDevelopmentTeam/papirus-icon-theme), and [Colloid GTK](https://github.com/vinceliuice/Colloid-gtk-theme). Colloid is built from the `2026-08-08` source tag. Fastfetch and Kitty are optional; their configuration is applied when they are present.
+The installer verifies SHA-256 checksums for [Open Bar](https://github.com/neuromorph/openbar), [Blur My Shell](https://github.com/aunetx/blur-my-shell), [P7 Borders](https://github.com/prasannavl/p7-borders-shell-extension), [Papirus](https://github.com/PapirusDevelopmentTeam/papirus-icon-theme), and [Colloid GTK](https://github.com/vinceliuice/Colloid-gtk-theme). Colloid is built from the `2026-08-08` source tag. Fastfetch and Kitty are optional; their configuration is applied when present.

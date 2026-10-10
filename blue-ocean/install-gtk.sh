@@ -1,6 +1,20 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+case "${1:-blue-ocean}" in
+    blue-ocean)
+        gtk_variant=default
+        gtk_tweaks=(nord normal)
+        name=Colloid-Dark-Compact-Nord
+        ;;
+    sakura)
+        gtk_variant=pink
+        gtk_tweaks=(normal)
+        name=Colloid-Pink-Dark-Compact
+        ;;
+    *) echo 'Unknown GTK color scheme.' >&2; exit 1 ;;
+esac
+
 # Colloid 2026-08-08, built in a temporary home. Only the GTK parts are kept.
 temp="$(mktemp -d)"
 trap 'rm -rf -- "$temp"' EXIT
@@ -52,10 +66,9 @@ if ! command -v sassc >/dev/null 2>&1; then
 fi
 
 HOME="$temp/home" XDG_DATA_HOME="$temp/home/.local/share" \
-    "$temp/src/install.sh" --dest "$temp/themes" --theme default \
-    --color dark --size compact --libadwaita fixed --tweaks nord normal
+    "$temp/src/install.sh" --dest "$temp/themes" --theme "$gtk_variant" \
+    --color dark --size compact --libadwaita fixed --tweaks "${gtk_tweaks[@]}"
 
-name=Colloid-Dark-Compact-Nord
 generated="$temp/themes/$name"
 [[ -s "$generated/gtk-3.0/gtk.css" && -s "$generated/gtk-4.0/gtk.css" && \
    -s "$temp/home/.config/gtk-4.0/gtk.css" ]] || {
