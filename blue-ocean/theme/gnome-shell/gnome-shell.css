@@ -7,37 +7,7 @@ stage {
   color: #e9f5fb;
 }
 
-/* Quiet GNOME top bar with a thin ocean accent. */
-#panel {
-  background-color: rgba(5, 24, 39, 0.62) !important;
-  border-bottom: 1px solid rgba(114, 203, 227, 0.20) !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
-  color: #edf8fd !important;
-}
-
-#panel .panel-button {
-  color: #e9f5fb !important;
-  border: 2px solid transparent !important;
-  border-radius: 8px !important;
-  font-weight: 600;
-}
-
-#panel .panel-button:hover,
-#panel .panel-button:focus {
-  background-color: rgba(71, 163, 199, 0.20) !important;
-  box-shadow: inset 0 0 0 1px rgba(124, 209, 230, 0.17) !important;
-}
-
-#panel .panel-button:active,
-#panel .panel-button:checked {
-  background-color: rgba(53, 164, 204, 0.30) !important;
-  box-shadow: inset 0 0 0 1px rgba(126, 220, 240, 0.30) !important;
-}
-
-#panel .system-status-icon {
-  color: #b4dce9 !important;
-}
+/* Open Bar owns the island panel; this stylesheet styles Shell surfaces below it. */
 
 /* Menus and popovers use a layered midnight glass surface. */
 .popup-menu-content,
@@ -212,14 +182,6 @@ stage {
   border: 1px solid rgba(110, 198, 225, 0.23) !important;
   border-radius: 19px !important;
   box-shadow: 0 10px 30px rgba(0, 12, 26, 0.35) !important;
-}
-
-/* Dash to Dock carries applications only; the clock stays in the top bar. */
-#dashtodockContainer.bottom #dash .dash-background {
-  background-color: rgba(7, 28, 45, 0.52) !important;
-  border: 1px solid rgba(110, 198, 225, 0.28) !important;
-  border-radius: 16px !important;
-  box-shadow: 0 9px 27px rgba(0, 12, 26, 0.38) !important;
 }
 
 .workspace-thumbnail-indicator {

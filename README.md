@@ -1,15 +1,19 @@
 # Blue Ocean · Debian GNOME dotfiles
 
-Tema minimalis gelap untuk Debian 13 + GNOME 48. Memakai wallpaper samudra, panel atas transparan, dock aplikasi kecil yang menghilang saat jendela memerlukan ruang, ikon Papirus-Dark, dan blur ringan pada Shell. Jam dan status sistem tetap berada di panel atas. Tombol Super membuka Overview.
+Tema Debian 13 + GNOME 48 bernuansa samudra. Inspirasi tata letaknya berasal dari [rion-ricing](https://github.com/SeraphimeZelel/rion-ricing): panel atas terpisah menjadi pulau kecil, terminal dengan identitas visual yang jelas, dan desktop tanpa dock permanen. Palet, wallpaper, dan konfigurasi di sini dibuat untuk Blue Ocean.
+
+![Wallpaper Blue Ocean](blue-ocean/wallpaper/blue-ocean-v2.png)
 
 ## Isi
 
-- `blue-ocean/wallpaper/blue-ocean-v2.png` — wallpaper aktif; `blue-ocean.png` tetap tersedia sebagai versi awal.
-- `blue-ocean/theme/gnome-shell/gnome-shell.css` — gaya Shell yang memuat stylesheet gelap GNOME 48 sebagai dasar, lalu mengubah panel, menu, quick settings, kalender, pencarian, dan notifikasi.
-- `blue-ocean/kitty/kitty.conf` — palet terminal Kitty.
-- `blue-ocean/install-components.sh` — memasang Dash to Dock 110 dan Blur My Shell 74 dari GNOME Extensions serta Papirus dari paket Debian ke folder pengguna tanpa `sudo`.
-- `blue-ocean/generate_wallpaper.py` — pembuat wallpaper versi awal dengan Pillow; wallpaper v2 adalah aset gambar tersendiri.
-- `blue-ocean/install.sh` dan `restore.sh` — penerapan dan pemulihan pengaturan.
+- `blue-ocean/wallpaper/blue-ocean-v2.png` — wallpaper aktif.
+- `blue-ocean/theme/gnome-shell/gnome-shell.css` — menu, quick settings, kalender, pencarian, dan notifikasi bernuansa laut.
+- `blue-ocean/kitty/kitty.conf` — terminal gelap dengan aksen cyan, dibuat tetap mudah dibaca di atas aplikasi lain.
+- `blue-ocean/fastfetch/config.jsonc` dan `blue-ocean/shell/prompt.bash` — ringkasan sistem dan prompt Bash dua baris.
+- `blue-ocean/install-components.sh` — memasang Open Bar 49, Blur My Shell 74, dan ikon Papirus ke folder pengguna tanpa `sudo`.
+- `blue-ocean/install.sh` dan `blue-ocean/restore.sh` — menerapkan dan mengembalikan pengaturan.
+
+Open Bar mengatur panel **Islands** yang tipis di sisi atas. Dash to Dock dinonaktifkan; tombol `Super` tetap membuka Overview untuk memilih aplikasi. Blur My Shell tetap dipakai di Overview, sehingga tidak mengganggu bentuk panel Open Bar.
 
 ## Pasang
 
@@ -18,7 +22,7 @@ cd blue-ocean
 ./install.sh
 ```
 
-Installer menyimpan snapshot pengaturan awal di `~/.local/state/blue-ocean-gnome/backups/` sebelum mengubahnya. Pemasangan ulang mempertahankan snapshot awal itu. Tidak memakai `sudo`. Koneksi internet dan repositori Debian diperlukan saat komponen belum terpasang. **Keluar dan masuk lagi** setelah pemasangan agar GNOME Wayland memuat ekstensi baru.
+Installer menyimpan snapshot pengaturan awal di `~/.local/state/blue-ocean-gnome/backups/`. Pemasangan ulang mempertahankan snapshot tersebut. Koneksi internet dan repositori Debian diperlukan bila komponen belum ada. Jika Open Bar belum muncul setelah pemasangan, keluar lalu masuk lagi ke sesi GNOME Wayland.
 
 ## Kembalikan
 
@@ -27,10 +31,10 @@ cd blue-ocean
 ./restore.sh
 ```
 
-Pemulihan memakai snapshot terbaru yang dibuat saat pemasangan. Jika Anda mengubah pengaturan GNOME setelah pemasangan, perubahan baru pada bidang yang sama akan ikut ditimpa saat memulihkan snapshot.
+Pemulihan mengembalikan pengaturan, ekstensi, file Kitty, Fastfetch, dan `.bashrc` dari snapshot. Perubahan pada bidang yang sama setelah pemasangan akan tertimpa ketika snapshot dipulihkan.
 
-## Perangkat lunak
+## Komponen
 
-GNOME Shell 48, `gsettings`, `dconf`, `apt-get`, `dpkg-deb`, `glib-compile-schemas`, dan Python 3. Installer mengunduh rilis GNOME Extensions dan paket Debian dengan checksum SHA-256, menonaktifkan Dash to Panel bila tersedia, lalu `restore.sh` mengembalikan status serta berkas semula. User Themes dan Kitty akan dilewati bila tidak ada. Pillow hanya dibutuhkan untuk membuat ulang wallpaper awal.
+GNOME Shell 48, `gsettings`, `dconf`, `apt-get`, `dpkg-deb`, `glib-compile-schemas`, dan Python 3. Installer memverifikasi SHA-256 rilis [Open Bar](https://github.com/neuromorph/openbar), [Blur My Shell](https://github.com/aunetx/blur-my-shell), dan paket [Papirus](https://github.com/PapirusDevelopmentTeam/papirus-icon-theme). User Themes dan Kitty dilewati jika tidak tersedia. Fastfetch bersifat opsional; bila tersedia, ringkasan sistem muncul saat Kitty dibuka.
 
-Referensi: [Dash to Dock](https://github.com/micheleg/dash-to-dock), [Blur My Shell](https://github.com/aunetx/blur-my-shell), [Papirus](https://github.com/PapirusDevelopmentTeam/papirus-icon-theme), dan [tema Shell GNOME 48](https://github.com/varunbpatil/Darkwaita). Blue Ocean memakai palet, bentuk, dan wallpaper sendiri.
+Rion menggunakan Fedora, Pywal, Wofi, dan wallpaper game. Konfigurasi tersebut tidak disalin karena Blue Ocean diarahkan untuk Debian GNOME dengan wallpaper samudra dan terminal Kitty.

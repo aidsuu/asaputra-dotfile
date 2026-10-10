@@ -17,7 +17,7 @@ for app in gsettings dconf; do
 done
 [[ "$(gnome-shell --version)" == *' 48.'* ]] || { echo 'Blue Ocean ini memerlukan GNOME Shell 48.' >&2; exit 1; }
 [[ -f "$root/wallpaper/blue-ocean-v2.png" ]] || { echo "Wallpaper Blue Ocean v2 tidak ditemukan." >&2; exit 1; }
-mkdir -p "$HOME/.themes" "$HOME/.local/share/backgrounds" "$HOME/.config/kitty"
+mkdir -p "$HOME/.themes" "$HOME/.local/share/backgrounds" "$HOME/.config/kitty" "$HOME/.config/fastfetch" "$HOME/.config/blue-ocean"
 
 if "$first_install"; then
     for entry in \
@@ -25,6 +25,7 @@ if "$first_install"; then
         'background:/org/gnome/desktop/background/' \
         'screensaver:/org/gnome/desktop/screensaver/' \
         'user-theme:/org/gnome/shell/extensions/user-theme/' \
+        'openbar:/org/gnome/shell/extensions/openbar/' \
         'dash-to-panel:/org/gnome/shell/extensions/dash-to-panel/'; do
         name="${entry%%:*}"
         path="${entry#*:}"
@@ -34,7 +35,8 @@ fi
 
 for entry in \
     'dash-to-dock:/org/gnome/shell/extensions/dash-to-dock/' \
-    'blur-my-shell:/org/gnome/shell/extensions/blur-my-shell/'; do
+    'blur-my-shell:/org/gnome/shell/extensions/blur-my-shell/' \
+    'openbar:/org/gnome/shell/extensions/openbar/'; do
     name="${entry%%:*}"
     path="${entry#*:}"
     [[ -f "$backup/$name.dconf" ]] || dconf dump "$path" > "$backup/$name.dconf"
@@ -45,6 +47,9 @@ done
 
 backup_file() {
     local name="$1" target="$2"
+    if [[ -e "$backup/$name" || -e "$backup/$name.absent" ]]; then
+        return
+    fi
     if [[ -e "$target" || -L "$target" ]]; then
         cp -a -- "$target" "$backup/$name"
     else
@@ -57,12 +62,34 @@ if "$first_install"; then
     backup_file wallpaper "$HOME/.local/share/backgrounds/blue-ocean.png"
     backup_file kitty.conf "$HOME/.config/kitty/kitty.conf"
 fi
+backup_file fastfetch "$HOME/.config/fastfetch/config.jsonc"
+backup_file bashrc "$HOME/.bashrc"
+backup_file prompt "$HOME/.config/blue-ocean/prompt.bash"
 rm -rf -- "$HOME/.themes/Blue-Ocean"
 cp -a -- "$root/theme" "$HOME/.themes/Blue-Ocean"
 cp -- "$root/wallpaper/blue-ocean-v2.png" "$HOME/.local/share/backgrounds/blue-ocean.png"
 if command -v kitty >/dev/null; then
     cp -- "$root/kitty/kitty.conf" "$HOME/.config/kitty/kitty.conf"
 fi
+cp -- "$root/fastfetch/config.jsonc" "$HOME/.config/fastfetch/config.jsonc"
+cp -- "$root/shell/prompt.bash" "$HOME/.config/blue-ocean/prompt.bash"
+python3 - "$HOME/.bashrc" <<'PY'
+from pathlib import Path
+import sys
+
+path = Path(sys.argv[1])
+start = '# >>> Blue Ocean prompt >>>'
+end = '# <<< Blue Ocean prompt <<<'
+content = path.read_text() if path.exists() else ''
+if start in content and end in content:
+    first = content.index(start)
+    last = content.index(end, first) + len(end)
+    content = content[:first].rstrip() + content[last:].lstrip('\n')
+content = content.rstrip() + '\n\n' + start + '\n'
+content += '[ -f "$HOME/.config/blue-ocean/prompt.bash" ] && . "$HOME/.config/blue-ocean/prompt.bash"\n'
+content += end + '\n'
+path.write_text(content)
+PY
 
 gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
 gsettings set org.gnome.desktop.interface accent-color 'blue'
@@ -85,34 +112,42 @@ else
     echo 'User Themes tidak ada; gaya GNOME Shell dilewati.'
 fi
 
-dock=/org/gnome/shell/extensions/dash-to-dock
-dconf write "$dock/dock-position" "'BOTTOM'"
-dconf write "$dock/dock-fixed" 'false'
-dconf write "$dock/intellihide" 'true'
-dconf write "$dock/autohide" 'true'
-dconf write "$dock/require-pressure-to-show" 'false'
-dconf write "$dock/show-delay" '0.12'
-dconf write "$dock/hide-delay" '0.18'
-dconf write "$dock/dash-max-icon-size" '36'
-dconf write "$dock/custom-theme-shrink" 'true'
-dconf write "$dock/show-favorites" 'true'
-dconf write "$dock/show-running" 'true'
-dconf write "$dock/show-show-apps-button" 'true'
-dconf write "$dock/show-mounts" 'false'
-dconf write "$dock/show-trash" 'false'
-dconf write "$dock/transparency-mode" "'FIXED'"
-dconf write "$dock/custom-background-color" 'true'
-dconf write "$dock/background-color" "'#0b283b'"
-dconf write "$dock/background-opacity" '0.62'
-dconf write "$dock/running-indicator-style" "'DOTS'"
-
 blur=/org/gnome/shell/extensions/blur-my-shell
-dconf write "$blur/panel/blur" 'true'
+dconf write "$blur/panel/blur" 'false'
 dconf write "$blur/panel/override-background" 'false'
-dconf write "$blur/dash-to-dock/blur" 'true'
+dconf write "$blur/dash-to-dock/blur" 'false'
 dconf write "$blur/dash-to-dock/override-background" 'false'
-dconf write "$blur/dash-to-dock/corner-radius" '15'
 dconf write "$blur/overview/blur" 'true'
+
+bar=/org/gnome/shell/extensions/openbar
+dconf write "$bar/bartype" "'Islands'"
+dconf write "$bar/position" "'Top'"
+dconf write "$bar/height" '32.0'
+dconf write "$bar/margin" '4.0'
+dconf write "$bar/set-bottom-margin" 'false'
+dconf write "$bar/set-overview" 'true'
+dconf write "$bar/set-fullscreen" 'false'
+dconf write "$bar/bgalpha" '0.0'
+dconf write "$bar/iscolor" "['0.035', '0.125', '0.195']"
+dconf write "$bar/dark-iscolor" "['0.035', '0.125', '0.195']"
+dconf write "$bar/isalpha" '0.79'
+dconf write "$bar/fgcolor" "['0.92', '0.98', '1.0']"
+dconf write "$bar/dark-fgcolor" "['0.92', '0.98', '1.0']"
+dconf write "$bar/bcolor" "['0.38', '0.75', '0.88']"
+dconf write "$bar/dark-bcolor" "['0.38', '0.75', '0.88']"
+dconf write "$bar/balpha" '0.55'
+dconf write "$bar/bwidth" '1.0'
+dconf write "$bar/bradius" '18.0'
+dconf write "$bar/neon" 'false'
+dconf write "$bar/shadow" 'true'
+dconf write "$bar/shalpha" '0.24'
+dconf write "$bar/hcolor" "['0.25', '0.67', '0.83']"
+dconf write "$bar/dark-hcolor" "['0.25', '0.67', '0.83']"
+dconf write "$bar/halpha" '0.27'
+dconf write "$bar/hpad" '2.0'
+dconf write "$bar/vpad" '2.0'
+dconf write "$bar/menustyle" 'false'
+dconf write "$bar/autotheme-refresh" 'false'
 
 python3 - <<'PY'
 import ast
@@ -120,7 +155,8 @@ import subprocess
 
 key = ['org.gnome.shell', 'enabled-extensions']
 enabled = ast.literal_eval(subprocess.check_output(['gsettings', 'get', *key], text=True))
-for uuid in ('dash-to-dock@micxgx.gmail.com', 'blur-my-shell@aunetx'):
+enabled = [uuid for uuid in enabled if uuid != 'dash-to-dock@micxgx.gmail.com']
+for uuid in ('blur-my-shell@aunetx', 'openbar@neuromorph'):
     if uuid not in enabled:
         enabled.append(uuid)
 subprocess.run(['gsettings', 'set', *key, repr(enabled)], check=True)
@@ -144,4 +180,4 @@ if "$first_install"; then
     printf '%s\n' "$backup" > "$state/latest"
 fi
 echo "Blue Ocean terpasang. Cadangan: $backup"
-echo 'Keluar dan masuk lagi agar GNOME Wayland memuat ekstensi baru.'
+echo 'Keluar dan masuk lagi bila Open Bar belum langsung aktif di GNOME Wayland.'

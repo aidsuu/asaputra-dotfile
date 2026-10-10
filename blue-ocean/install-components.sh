@@ -18,8 +18,8 @@ record_path() {
     fi
 }
 
-record_path dock-extension "$extensions/dash-to-dock@micxgx.gmail.com"
 record_path blur-extension "$extensions/blur-my-shell@aunetx"
+record_path openbar-extension "$extensions/openbar@neuromorph"
 record_path papirus "$icons/Papirus"
 record_path papirus-dark "$icons/Papirus-Dark"
 record_path papirus-light "$icons/Papirus-Light"
@@ -28,7 +28,7 @@ for app in python3 glib-compile-schemas; do
     command -v "$app" >/dev/null || { echo "Perlu $app" >&2; exit 1; }
 done
 
-# These exact GNOME Extensions releases are the ones checked on GNOME 48.
+# These exact GNOME Extensions releases are compatible with GNOME 48.
 python3 - "$extensions" <<'PY'
 import hashlib
 from io import BytesIO
@@ -42,8 +42,8 @@ from zipfile import ZipFile
 
 directory = Path(sys.argv[1])
 releases = {
-    'dash-to-dock@micxgx.gmail.com': (110, 76105, 'b05003e79835a35451e94931539ba1977f2a7a93b652a4fc6b7be60a77c18ae1'),
     'blur-my-shell@aunetx': (74, 75939, '9ad74044e7ece1e9a2025ddab107240fcc9b5e33ed2b2b651ea97ae7b8a29df4'),
+    'openbar@neuromorph': (49, 65598, 'dc2ea39777a7335b87972ecb0bfe839f655df030ed64c0cf430409b5cb392f32'),
 }
 for uuid, (version, tag, expected_hash) in releases.items():
     target = directory / uuid
@@ -67,7 +67,7 @@ for uuid, (version, tag, expected_hash) in releases.items():
         shutil.copytree(extracted, target)
 PY
 
-for uuid in dash-to-dock@micxgx.gmail.com blur-my-shell@aunetx; do
+for uuid in blur-my-shell@aunetx openbar@neuromorph; do
     glib-compile-schemas "$extensions/$uuid/schemas"
 done
 

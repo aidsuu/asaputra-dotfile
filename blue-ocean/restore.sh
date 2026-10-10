@@ -13,7 +13,8 @@ for entry in \
     'user-theme:/org/gnome/shell/extensions/user-theme/' \
     'dash-to-panel:/org/gnome/shell/extensions/dash-to-panel/' \
     'dash-to-dock:/org/gnome/shell/extensions/dash-to-dock/' \
-    'blur-my-shell:/org/gnome/shell/extensions/blur-my-shell/'; do
+    'blur-my-shell:/org/gnome/shell/extensions/blur-my-shell/' \
+    'openbar:/org/gnome/shell/extensions/openbar/'; do
     name="${entry%%:*}"
     path="${entry#*:}"
     if [[ -f "$backup/$name.dconf" ]]; then
@@ -47,8 +48,19 @@ restore_file theme "$HOME/.themes/Blue-Ocean"
 restore_file wallpaper "$HOME/.local/share/backgrounds/blue-ocean.png"
 restore_file kitty.conf "$HOME/.config/kitty/kitty.conf"
 for entry in \
+    "fastfetch:$HOME/.config/fastfetch/config.jsonc" \
+    "bashrc:$HOME/.bashrc" \
+    "prompt:$HOME/.config/blue-ocean/prompt.bash"; do
+    name="${entry%%:*}"
+    target="${entry#*:}"
+    if [[ -e "$backup/$name" || -e "$backup/$name.absent" ]]; then
+        restore_file "$name" "$target"
+    fi
+done
+for entry in \
     "dock-extension:$HOME/.local/share/gnome-shell/extensions/dash-to-dock@micxgx.gmail.com" \
     "blur-extension:$HOME/.local/share/gnome-shell/extensions/blur-my-shell@aunetx" \
+    "openbar-extension:$HOME/.local/share/gnome-shell/extensions/openbar@neuromorph" \
     "papirus:$HOME/.local/share/icons/Papirus" \
     "papirus-dark:$HOME/.local/share/icons/Papirus-Dark" \
     "papirus-light:$HOME/.local/share/icons/Papirus-Light"; do
