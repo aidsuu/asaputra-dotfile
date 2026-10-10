@@ -7,7 +7,22 @@ stage {
   color: #f2e5ec;
 }
 
-/* Open Bar owns the island panel; this stylesheet styles Shell surfaces below it. */
+/* Open Bar owns the island panel. Keep app icons quiet and compact. */
+.azTaskbar-BaseIcon {
+  padding: 1px 3px !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 8px !important;
+}
+
+.azTaskbar-favorite {
+  background-color: transparent !important;
+}
+
+.azTaskbar-BaseIcon:hover,
+.azTaskbar-BaseIcon:focus {
+  background-color: rgba(169, 105, 136, 0.22) !important;
+}
 
 /* Menus and popovers use a layered plum glass surface. */
 .popup-menu-content,

@@ -13,6 +13,7 @@ for entry in \
     'user-theme:/org/gnome/shell/extensions/user-theme/' \
     'dash-to-panel:/org/gnome/shell/extensions/dash-to-panel/' \
     'dash-to-dock:/org/gnome/shell/extensions/dash-to-dock/' \
+    'app-icons-taskbar:/org/gnome/shell/extensions/aztaskbar/' \
     'blur-my-shell:/org/gnome/shell/extensions/blur-my-shell/' \
     'openbar:/org/gnome/shell/extensions/openbar/'; do
     name="${entry%%:*}"
@@ -87,6 +88,7 @@ for entry in \
     "blur-extension:$HOME/.local/share/gnome-shell/extensions/blur-my-shell@aunetx" \
     "openbar-extension:$HOME/.local/share/gnome-shell/extensions/openbar@neuromorph" \
     "p7-borders-extension:$HOME/.local/share/gnome-shell/extensions/p7-borders@prasannavl.com" \
+    "app-icons-taskbar-extension:$HOME/.local/share/gnome-shell/extensions/aztaskbar@aztaskbar.gitlab.com" \
     "papirus:$HOME/.local/share/icons/Papirus" \
     "papirus-dark:$HOME/.local/share/icons/Papirus-Dark" \
     "papirus-light:$HOME/.local/share/icons/Papirus-Light"; do

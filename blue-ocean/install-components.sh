@@ -21,6 +21,7 @@ record_path() {
 record_path blur-extension "$extensions/blur-my-shell@aunetx"
 record_path openbar-extension "$extensions/openbar@neuromorph"
 record_path p7-borders-extension "$extensions/p7-borders@prasannavl.com"
+record_path app-icons-taskbar-extension "$extensions/aztaskbar@aztaskbar.gitlab.com"
 record_path papirus "$icons/Papirus"
 record_path papirus-dark "$icons/Papirus-Dark"
 record_path papirus-light "$icons/Papirus-Light"
@@ -46,6 +47,7 @@ releases = {
     'blur-my-shell@aunetx': (74, 75939, '9ad74044e7ece1e9a2025ddab107240fcc9b5e33ed2b2b651ea97ae7b8a29df4'),
     'openbar@neuromorph': (49, 65598, 'dc2ea39777a7335b87972ecb0bfe839f655df030ed64c0cf430409b5cb392f32'),
     'p7-borders@prasannavl.com': (58, 75727, '2046fdf1c9b2cdad235b67a57dedb3c38f0fbe918ead7b37dd1c60efbc147504'),
+    'aztaskbar@aztaskbar.gitlab.com': (40, 75024, 'dee68715177baee01422ccd5688c62596417cd65e8778c3df7ec93115d3c399f'),
 }
 for uuid, (version, tag, expected_hash) in releases.items():
     target = directory / uuid
@@ -85,7 +87,7 @@ if new not in source:
     path.write_text(source.replace(old, new, 1))
 PY
 
-for uuid in blur-my-shell@aunetx openbar@neuromorph p7-borders@prasannavl.com; do
+for uuid in blur-my-shell@aunetx openbar@neuromorph p7-borders@prasannavl.com aztaskbar@aztaskbar.gitlab.com; do
     glib-compile-schemas "$extensions/$uuid/schemas"
 done
 

@@ -57,6 +57,7 @@ fi
 
 for entry in \
     'dash-to-dock:/org/gnome/shell/extensions/dash-to-dock/' \
+    'app-icons-taskbar:/org/gnome/shell/extensions/aztaskbar/' \
     'blur-my-shell:/org/gnome/shell/extensions/blur-my-shell/' \
     'openbar:/org/gnome/shell/extensions/openbar/'; do
     name="${entry%%:*}"
@@ -191,6 +192,28 @@ dconf write "$bar/vpad" '0.0'
 dconf write "$bar/menustyle" 'false'
 dconf write "$bar/autotheme-refresh" 'false'
 
+# Put favorites and running apps in the existing slim panel, then hide the
+# redundant dash in the GNOME overview.
+taskbar=/org/gnome/shell/extensions/aztaskbar
+dconf write "$taskbar/hide-dash" 'true'
+dconf write "$taskbar/panel-on-all-monitors" 'false'
+dconf write "$taskbar/panel-location" "'TOP'"
+dconf write "$taskbar/main-panel-height" '(false, 26)'
+dconf write "$taskbar/icon-size" '18'
+dconf write "$taskbar/icon-padding-horizontal" '3'
+dconf write "$taskbar/taskbar-spacing" '1'
+dconf write "$taskbar/position-in-panel" "'LEFT'"
+dconf write "$taskbar/position-offset" '1'
+dconf write "$taskbar/favorites" 'true'
+dconf write "$taskbar/show-running-apps" 'true'
+dconf write "$taskbar/show-apps-button" '(false, 0)'
+dconf write "$taskbar/update-notifier-enabled" 'false'
+if [[ "$scheme" == sakura ]]; then
+    dconf write "$taskbar/indicator-color-focused" "'rgb(202, 144, 172)'"
+else
+    dconf write "$taskbar/indicator-color-focused" "'rgb(119, 210, 233)'"
+fi
+
 # Keep borders exclusive to Kitty. The edge tracks the active window.
 p7_schema="$HOME/.local/share/gnome-shell/extensions/p7-borders@prasannavl.com/schemas"
 python3 - "$p7_schema" "$scheme" <<'PY'
@@ -231,7 +254,7 @@ import subprocess
 key = ['org.gnome.shell', 'enabled-extensions']
 enabled = ast.literal_eval(subprocess.check_output(['gsettings', 'get', *key], text=True))
 enabled = [uuid for uuid in enabled if uuid != 'dash-to-dock@micxgx.gmail.com']
-for uuid in ('blur-my-shell@aunetx', 'openbar@neuromorph', 'p7-borders@prasannavl.com'):
+for uuid in ('blur-my-shell@aunetx', 'openbar@neuromorph', 'p7-borders@prasannavl.com', 'aztaskbar@aztaskbar.gitlab.com'):
     if uuid not in enabled:
         enabled.append(uuid)
 subprocess.run(['gsettings', 'set', *key, repr(enabled)], check=True)

@@ -8,7 +8,7 @@
 | Deep navy, muted cyan, and moonlit water | Dark plum, dusty rose, and cherry blossoms at dusk |
 | <img src="blue-ocean/wallpaper/blue-ocean-v2.png" alt="Blue Ocean wallpaper" width="440"> | <img src="sakura/wallpaper/sakura-dusk.png" alt="Sakura wallpaper" width="440"> |
 
-Both schemes keep the same slim island bar and dock-free desktop. Press `Super` for the app overview. Each scheme coordinates the wallpaper, GNOME Shell, Colloid GTK, Kitty, Bash prompt, Fastfetch, cursor, and Kitty window outline. The Kitty outline stays subtle and follows focus.
+Both schemes put small icons for favorite and running apps in the slim top panel. The separate dock is hidden, including in the app overview. Press `Super` to search or browse all apps. Each scheme coordinates the wallpaper, GNOME Shell, Colloid GTK, Kitty, Bash prompt, Fastfetch, cursor, and Kitty window outline. The Kitty outline stays subtle and follows focus.
 
 ## Install and switch
 
@@ -36,4 +36,4 @@ blue-ocean/  Blue Ocean artwork, colors, and shared installer
 sakura/      Sakura artwork, colors, and installer wrapper
 ```
 
-The installer verifies SHA-256 checksums for [Open Bar](https://github.com/neuromorph/openbar), [Blur My Shell](https://github.com/aunetx/blur-my-shell), [P7 Borders](https://github.com/prasannavl/p7-borders-shell-extension), [Papirus](https://github.com/PapirusDevelopmentTeam/papirus-icon-theme), and [Colloid GTK](https://github.com/vinceliuice/Colloid-gtk-theme). Colloid is built from the `2026-08-08` source tag. Fastfetch and Kitty are optional; their configuration is applied when present.
+The installer verifies SHA-256 checksums for [Open Bar](https://github.com/neuromorph/openbar), [App Icons Taskbar](https://gitlab.com/AndrewZaech/aztaskbar), [Blur My Shell](https://github.com/aunetx/blur-my-shell), [P7 Borders](https://github.com/prasannavl/p7-borders-shell-extension), [Papirus](https://github.com/PapirusDevelopmentTeam/papirus-icon-theme), and [Colloid GTK](https://github.com/vinceliuice/Colloid-gtk-theme). Colloid is built from the `2026-08-08` source tag. Fastfetch and Kitty are optional; their configuration is applied when present.
