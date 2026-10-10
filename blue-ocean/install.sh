@@ -41,6 +41,8 @@ for entry in \
     path="${entry#*:}"
     [[ -f "$backup/$name.dconf" ]] || dconf dump "$path" > "$backup/$name.dconf"
 done
+[[ -f "$backup/p7-borders.dconf" ]] || \
+    dconf dump /org/gnome/shell/extensions/p7-borders/ > "$backup/p7-borders.dconf"
 [[ -f "$backup/shell-enabled-extensions" ]] || \
     gsettings get org.gnome.shell enabled-extensions > "$backup/shell-enabled-extensions"
 "$root/install-components.sh" "$backup"
@@ -154,6 +156,34 @@ dconf write "$bar/vpad" '2.0'
 dconf write "$bar/menustyle" 'false'
 dconf write "$bar/autotheme-refresh" 'false'
 
+# Keep borders exclusive to Kitty. The vivid edge tracks the active window.
+p7_schema="$HOME/.local/share/gnome-shell/extensions/p7-borders@prasannavl.com/schemas"
+python3 - "$p7_schema" <<'PY'
+import json
+from pathlib import Path
+import sys
+import gi
+from gi.repository import Gio
+
+source = Gio.SettingsSchemaSource.new_from_directory(sys.argv[1], Gio.SettingsSchemaSource.get_default(), False)
+schema = source.lookup('org.gnome.shell.extensions.p7-borders', False)
+if schema is None:
+    raise SystemExit('P7 Borders settings schema is unavailable')
+settings = Gio.Settings.new_full(schema, None, None)
+settings.set_boolean('default-enabled', False)
+settings.set_boolean('use-shipped-configs', False)
+settings.set_string('rules', json.dumps({
+    'class:kitty': {
+        'enabled': True,
+        'width': 3,
+        'margins': 2,
+        'radius': 14,
+        'activeColor': 'rgba(90, 220, 255, 0.96)',
+        'inactiveColor': 'rgba(70, 143, 170, 0.48)',
+    },
+}, separators=(',', ':')))
+PY
+
 python3 - <<'PY'
 import ast
 import subprocess
@@ -161,7 +191,7 @@ import subprocess
 key = ['org.gnome.shell', 'enabled-extensions']
 enabled = ast.literal_eval(subprocess.check_output(['gsettings', 'get', *key], text=True))
 enabled = [uuid for uuid in enabled if uuid != 'dash-to-dock@micxgx.gmail.com']
-for uuid in ('blur-my-shell@aunetx', 'openbar@neuromorph'):
+for uuid in ('blur-my-shell@aunetx', 'openbar@neuromorph', 'p7-borders@prasannavl.com'):
     if uuid not in enabled:
         enabled.append(uuid)
 subprocess.run(['gsettings', 'set', *key, repr(enabled)], check=True)

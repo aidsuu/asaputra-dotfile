@@ -13,7 +13,7 @@
 | --- | --- |
 | Desktop | An original ocean wallpaper, a slim island-style top bar, and no persistent dock. Press `Super` for the app overview. |
 | Applications | Colloid Nord Dark Compact for GTK 3 and GTK 4, with Papirus-Dark icons and a blue accent. |
-| Terminal | A frameless Kitty window with a dimmed ocean background, clear text, and a restrained cyan palette. |
+| Terminal | A frameless Kitty window with a dimmed ocean background, clear text, and a luminous cyan outline that brightens on focus. |
 | Shell | Blue Ocean menus, quick settings, search, and notifications; a softly blurred overview. |
 
 ## Install
@@ -49,4 +49,4 @@ blue-ocean/
 └── restore.sh            restore the saved setup
 ```
 
-The installer verifies SHA-256 checksums for [Open Bar](https://github.com/neuromorph/openbar), [Blur My Shell](https://github.com/aunetx/blur-my-shell), [Papirus](https://github.com/PapirusDevelopmentTeam/papirus-icon-theme), and [Colloid GTK](https://github.com/vinceliuice/Colloid-gtk-theme). Colloid is built from the `2026-08-08` source tag. Fastfetch and Kitty are optional; their configuration is applied when they are present.
+The installer verifies SHA-256 checksums for [Open Bar](https://github.com/neuromorph/openbar), [Blur My Shell](https://github.com/aunetx/blur-my-shell), [P7 Borders](https://github.com/prasannavl/p7-borders-shell-extension), [Papirus](https://github.com/PapirusDevelopmentTeam/papirus-icon-theme), and [Colloid GTK](https://github.com/vinceliuice/Colloid-gtk-theme). Colloid is built from the `2026-08-08` source tag. Fastfetch and Kitty are optional; their configuration is applied when they are present.

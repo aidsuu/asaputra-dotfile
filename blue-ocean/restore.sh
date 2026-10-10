@@ -22,6 +22,10 @@ for entry in \
         dconf load "$path" < "$backup/$name.dconf"
     fi
 done
+if [[ -f "$backup/p7-borders.dconf" ]]; then
+    dconf reset -f /org/gnome/shell/extensions/p7-borders/
+    dconf load /org/gnome/shell/extensions/p7-borders/ < "$backup/p7-borders.dconf"
+fi
 
 if [[ -f "$backup/shell-enabled-extensions" ]]; then
     gsettings set org.gnome.shell enabled-extensions "$(< "$backup/shell-enabled-extensions")"
@@ -72,6 +76,7 @@ for entry in \
     "dock-extension:$HOME/.local/share/gnome-shell/extensions/dash-to-dock@micxgx.gmail.com" \
     "blur-extension:$HOME/.local/share/gnome-shell/extensions/blur-my-shell@aunetx" \
     "openbar-extension:$HOME/.local/share/gnome-shell/extensions/openbar@neuromorph" \
+    "p7-borders-extension:$HOME/.local/share/gnome-shell/extensions/p7-borders@prasannavl.com" \
     "papirus:$HOME/.local/share/icons/Papirus" \
     "papirus-dark:$HOME/.local/share/icons/Papirus-Dark" \
     "papirus-light:$HOME/.local/share/icons/Papirus-Light"; do

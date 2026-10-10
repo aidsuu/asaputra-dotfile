@@ -20,6 +20,7 @@ record_path() {
 
 record_path blur-extension "$extensions/blur-my-shell@aunetx"
 record_path openbar-extension "$extensions/openbar@neuromorph"
+record_path p7-borders-extension "$extensions/p7-borders@prasannavl.com"
 record_path papirus "$icons/Papirus"
 record_path papirus-dark "$icons/Papirus-Dark"
 record_path papirus-light "$icons/Papirus-Light"
@@ -44,6 +45,7 @@ directory = Path(sys.argv[1])
 releases = {
     'blur-my-shell@aunetx': (74, 75939, '9ad74044e7ece1e9a2025ddab107240fcc9b5e33ed2b2b651ea97ae7b8a29df4'),
     'openbar@neuromorph': (49, 65598, 'dc2ea39777a7335b87972ecb0bfe839f655df030ed64c0cf430409b5cb392f32'),
+    'p7-borders@prasannavl.com': (58, 75727, '2046fdf1c9b2cdad235b67a57dedb3c38f0fbe918ead7b37dd1c60efbc147504'),
 }
 for uuid, (version, tag, expected_hash) in releases.items():
     target = directory / uuid
@@ -67,7 +69,23 @@ for uuid, (version, tag, expected_hash) in releases.items():
         shutil.copytree(extracted, target)
 PY
 
-for uuid in blur-my-shell@aunetx openbar@neuromorph; do
+# P7 attaches an unstyled St.Widget to each window. Give its opt-in border a
+# class so the Blue Ocean Shell theme can paint a soft halo behind Kitty.
+python3 - "$extensions/p7-borders@prasannavl.com/shell/bordermanager.js" <<'PY'
+from pathlib import Path
+import sys
+
+path = Path(sys.argv[1])
+source = path.read_text()
+old = 'const border = new St.Widget({\n      reactive: false,\n      visible: false,'
+new = 'const border = new St.Widget({\n      reactive: false,\n      style_class: "blue-ocean-window-border",\n      visible: false,'
+if new not in source:
+    if source.count(old) != 1:
+        raise SystemExit('Unexpected P7 Borders source layout')
+    path.write_text(source.replace(old, new, 1))
+PY
+
+for uuid in blur-my-shell@aunetx openbar@neuromorph p7-borders@prasannavl.com; do
     glib-compile-schemas "$extensions/$uuid/schemas"
 done
 
