@@ -9,7 +9,7 @@ stage {
 
 /* Quiet GNOME top bar with a thin ocean accent. */
 #panel {
-  background-color: rgba(5, 24, 39, 0.78) !important;
+  background-color: rgba(5, 24, 39, 0.62) !important;
   border-bottom: 1px solid rgba(114, 203, 227, 0.20) !important;
   border-radius: 0 !important;
   box-shadow: none !important;
@@ -212,6 +212,14 @@ stage {
   border: 1px solid rgba(110, 198, 225, 0.23) !important;
   border-radius: 19px !important;
   box-shadow: 0 10px 30px rgba(0, 12, 26, 0.35) !important;
+}
+
+/* Dash to Dock carries applications only; the clock stays in the top bar. */
+#dashtodockContainer.bottom #dash .dash-background {
+  background-color: rgba(7, 28, 45, 0.52) !important;
+  border: 1px solid rgba(110, 198, 225, 0.28) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 9px 27px rgba(0, 12, 26, 0.38) !important;
 }
 
 .workspace-thumbnail-indicator {

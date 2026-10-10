@@ -15,6 +15,7 @@ fi
 for app in gsettings dconf; do
     command -v "$app" >/dev/null || { echo "Perlu $app" >&2; exit 1; }
 done
+[[ "$(gnome-shell --version)" == *' 48.'* ]] || { echo 'Blue Ocean ini memerlukan GNOME Shell 48.' >&2; exit 1; }
 [[ -f "$root/wallpaper/blue-ocean-v2.png" ]] || { echo "Wallpaper Blue Ocean v2 tidak ditemukan." >&2; exit 1; }
 mkdir -p "$HOME/.themes" "$HOME/.local/share/backgrounds" "$HOME/.config/kitty"
 
@@ -30,6 +31,17 @@ if "$first_install"; then
         dconf dump "$path" > "$backup/$name.dconf"
     done
 fi
+
+for entry in \
+    'dash-to-dock:/org/gnome/shell/extensions/dash-to-dock/' \
+    'blur-my-shell:/org/gnome/shell/extensions/blur-my-shell/'; do
+    name="${entry%%:*}"
+    path="${entry#*:}"
+    [[ -f "$backup/$name.dconf" ]] || dconf dump "$path" > "$backup/$name.dconf"
+done
+[[ -f "$backup/shell-enabled-extensions" ]] || \
+    gsettings get org.gnome.shell enabled-extensions > "$backup/shell-enabled-extensions"
+"$root/install-components.sh" "$backup"
 
 backup_file() {
     local name="$1" target="$2"
@@ -55,7 +67,7 @@ fi
 gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
 gsettings set org.gnome.desktop.interface accent-color 'blue'
 gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita'
-gsettings set org.gnome.desktop.interface icon-theme 'Adwaita'
+gsettings set org.gnome.desktop.interface icon-theme 'Papirus-Dark'
 gsettings set org.gnome.desktop.interface cursor-theme 'Bibata-Material-Deep-Blue'
 gsettings set org.gnome.desktop.interface font-name 'Cantarell 11'
 gsettings set org.gnome.desktop.interface monospace-font-name 'Noto Sans Mono 11'
@@ -72,6 +84,47 @@ if gnome-extensions info user-theme@gnome-shell-extensions.gcampax.github.com >/
 else
     echo 'User Themes tidak ada; gaya GNOME Shell dilewati.'
 fi
+
+dock=/org/gnome/shell/extensions/dash-to-dock
+dconf write "$dock/dock-position" "'BOTTOM'"
+dconf write "$dock/dock-fixed" 'false'
+dconf write "$dock/intellihide" 'true'
+dconf write "$dock/autohide" 'true'
+dconf write "$dock/require-pressure-to-show" 'false'
+dconf write "$dock/show-delay" '0.12'
+dconf write "$dock/hide-delay" '0.18'
+dconf write "$dock/dash-max-icon-size" '36'
+dconf write "$dock/custom-theme-shrink" 'true'
+dconf write "$dock/show-favorites" 'true'
+dconf write "$dock/show-running" 'true'
+dconf write "$dock/show-show-apps-button" 'true'
+dconf write "$dock/show-mounts" 'false'
+dconf write "$dock/show-trash" 'false'
+dconf write "$dock/transparency-mode" "'FIXED'"
+dconf write "$dock/custom-background-color" 'true'
+dconf write "$dock/background-color" "'#0b283b'"
+dconf write "$dock/background-opacity" '0.62'
+dconf write "$dock/running-indicator-style" "'DOTS'"
+
+blur=/org/gnome/shell/extensions/blur-my-shell
+dconf write "$blur/panel/blur" 'true'
+dconf write "$blur/panel/override-background" 'false'
+dconf write "$blur/dash-to-dock/blur" 'true'
+dconf write "$blur/dash-to-dock/override-background" 'false'
+dconf write "$blur/dash-to-dock/corner-radius" '15'
+dconf write "$blur/overview/blur" 'true'
+
+python3 - <<'PY'
+import ast
+import subprocess
+
+key = ['org.gnome.shell', 'enabled-extensions']
+enabled = ast.literal_eval(subprocess.check_output(['gsettings', 'get', *key], text=True))
+for uuid in ('dash-to-dock@micxgx.gmail.com', 'blur-my-shell@aunetx'):
+    if uuid not in enabled:
+        enabled.append(uuid)
+subprocess.run(['gsettings', 'set', *key, repr(enabled)], check=True)
+PY
 
 if command -v gnome-extensions >/dev/null && \
    gnome-extensions info dash-to-panel@jderose9.github.com >/dev/null 2>&1; then
@@ -91,4 +144,4 @@ if "$first_install"; then
     printf '%s\n' "$backup" > "$state/latest"
 fi
 echo "Blue Ocean terpasang. Cadangan: $backup"
-echo 'Keluar dan masuk lagi bila tampilan Shell belum sepenuhnya berubah.'
+echo 'Keluar dan masuk lagi agar GNOME Wayland memuat ekstensi baru.'

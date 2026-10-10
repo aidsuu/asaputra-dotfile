@@ -11,12 +11,20 @@ for entry in \
     'background:/org/gnome/desktop/background/' \
     'screensaver:/org/gnome/desktop/screensaver/' \
     'user-theme:/org/gnome/shell/extensions/user-theme/' \
-    'dash-to-panel:/org/gnome/shell/extensions/dash-to-panel/'; do
+    'dash-to-panel:/org/gnome/shell/extensions/dash-to-panel/' \
+    'dash-to-dock:/org/gnome/shell/extensions/dash-to-dock/' \
+    'blur-my-shell:/org/gnome/shell/extensions/blur-my-shell/'; do
     name="${entry%%:*}"
     path="${entry#*:}"
-    dconf reset -f "$path"
-    dconf load "$path" < "$backup/$name.dconf"
+    if [[ -f "$backup/$name.dconf" ]]; then
+        dconf reset -f "$path"
+        dconf load "$path" < "$backup/$name.dconf"
+    fi
 done
+
+if [[ -f "$backup/shell-enabled-extensions" ]]; then
+    gsettings set org.gnome.shell enabled-extensions "$(< "$backup/shell-enabled-extensions")"
+fi
 
 if command -v gnome-extensions >/dev/null && \
    gnome-extensions info dash-to-panel@jderose9.github.com >/dev/null 2>&1; then
@@ -38,5 +46,17 @@ restore_file() {
 restore_file theme "$HOME/.themes/Blue-Ocean"
 restore_file wallpaper "$HOME/.local/share/backgrounds/blue-ocean.png"
 restore_file kitty.conf "$HOME/.config/kitty/kitty.conf"
+for entry in \
+    "dock-extension:$HOME/.local/share/gnome-shell/extensions/dash-to-dock@micxgx.gmail.com" \
+    "blur-extension:$HOME/.local/share/gnome-shell/extensions/blur-my-shell@aunetx" \
+    "papirus:$HOME/.local/share/icons/Papirus" \
+    "papirus-dark:$HOME/.local/share/icons/Papirus-Dark" \
+    "papirus-light:$HOME/.local/share/icons/Papirus-Light"; do
+    name="${entry%%:*}"
+    target="${entry#*:}"
+    if [[ -e "$backup/$name" || -e "$backup/$name.absent" ]]; then
+        restore_file "$name" "$target"
+    fi
+done
 echo "Pengaturan dipulihkan dari $backup"
 echo 'Keluar dan masuk lagi bila tampilan Shell belum sepenuhnya berubah.'
