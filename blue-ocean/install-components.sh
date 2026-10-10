@@ -25,7 +25,7 @@ record_path papirus-dark "$icons/Papirus-Dark"
 record_path papirus-light "$icons/Papirus-Light"
 
 for app in python3 glib-compile-schemas; do
-    command -v "$app" >/dev/null || { echo "Perlu $app" >&2; exit 1; }
+    command -v "$app" >/dev/null || { echo "Missing required command: $app" >&2; exit 1; }
 done
 
 # These exact GNOME Extensions releases are compatible with GNOME 48.
@@ -53,7 +53,7 @@ for uuid, (version, tag, expected_hash) in releases.items():
     url = f'https://extensions.gnome.org/download-extension/{uuid}.shell-extension.zip?version_tag={tag}'
     archive = urlopen(url, timeout=30).read()
     if hashlib.sha256(archive).hexdigest() != expected_hash:
-        raise SystemExit(f'Checksum ekstensi tidak cocok: {uuid}')
+        raise SystemExit(f'Extension checksum mismatch: {uuid}')
     with tempfile.TemporaryDirectory() as temp:
         extracted = Path(temp) / 'extension'
         extracted.mkdir()
@@ -61,7 +61,7 @@ for uuid, (version, tag, expected_hash) in releases.items():
             bundle.extractall(extracted)
         info = json.loads((extracted / 'metadata.json').read_text())
         if info.get('uuid') != uuid or info.get('version') != version or '48' not in info.get('shell-version', []):
-            raise SystemExit(f'Ekstensi tidak cocok dengan GNOME 48: {uuid}')
+            raise SystemExit(f'Extension is incompatible with GNOME 48: {uuid}')
         if target.exists():
             shutil.rmtree(target)
         shutil.copytree(extracted, target)
@@ -77,7 +77,7 @@ for name in Papirus Papirus-Dark Papirus-Light; do
 done
 if "$need_icons"; then
     for app in apt-get dpkg-deb sha256sum; do
-        command -v "$app" >/dev/null || { echo "Perlu $app" >&2; exit 1; }
+        command -v "$app" >/dev/null || { echo "Missing required command: $app" >&2; exit 1; }
     done
     temp="$(mktemp -d)"
     trap 'rm -rf -- "$temp"' EXIT

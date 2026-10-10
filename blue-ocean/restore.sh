@@ -2,9 +2,9 @@
 set -euo pipefail
 
 state="${XDG_STATE_HOME:-$HOME/.local/state}/blue-ocean-gnome"
-[[ -f "$state/latest" ]] || { echo 'Tidak ada snapshot Blue Ocean.' >&2; exit 1; }
+[[ -f "$state/latest" ]] || { echo 'No Blue Ocean backup found.' >&2; exit 1; }
 backup="$(< "$state/latest")"
-[[ -d "$backup" ]] || { echo "Snapshot tidak ditemukan: $backup" >&2; exit 1; }
+[[ -d "$backup" ]] || { echo "Backup directory is missing: $backup" >&2; exit 1; }
 
 for entry in \
     'interface:/org/gnome/desktop/interface/' \
@@ -81,5 +81,5 @@ for entry in \
         restore_file "$name" "$target"
     fi
 done
-echo "Pengaturan dipulihkan dari $backup"
-echo 'Keluar dan masuk lagi bila tampilan Shell belum sepenuhnya berubah.'
+echo "Settings restored from $backup"
+echo 'Sign out and back in if the Shell appearance has not fully changed.'

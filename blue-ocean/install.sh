@@ -13,10 +13,10 @@ else
 fi
 
 for app in gsettings dconf; do
-    command -v "$app" >/dev/null || { echo "Perlu $app" >&2; exit 1; }
+    command -v "$app" >/dev/null || { echo "Missing required command: $app" >&2; exit 1; }
 done
-[[ "$(gnome-shell --version)" == *' 48.'* ]] || { echo 'Blue Ocean ini memerlukan GNOME Shell 48.' >&2; exit 1; }
-[[ -f "$root/wallpaper/blue-ocean-v2.png" ]] || { echo "Wallpaper Blue Ocean v2 tidak ditemukan." >&2; exit 1; }
+[[ "$(gnome-shell --version)" == *' 48.'* ]] || { echo 'Blue Ocean requires GNOME Shell 48.' >&2; exit 1; }
+[[ -f "$root/wallpaper/blue-ocean-v2.png" ]] || { echo 'Blue Ocean wallpaper is missing.' >&2; exit 1; }
 mkdir -p "$HOME/.themes" "$HOME/.local/share/backgrounds" "$HOME/.config/kitty" "$HOME/.config/fastfetch" "$HOME/.config/blue-ocean"
 
 if "$first_install"; then
@@ -114,7 +114,7 @@ if gnome-extensions info user-theme@gnome-shell-extensions.gcampax.github.com >/
     dconf write /org/gnome/shell/extensions/user-theme/name "''"
     dconf write /org/gnome/shell/extensions/user-theme/name "'Blue-Ocean'"
 else
-    echo 'User Themes tidak ada; gaya GNOME Shell dilewati.'
+    echo 'User Themes is unavailable; skipping GNOME Shell styling.'
 fi
 
 blur=/org/gnome/shell/extensions/blur-my-shell
@@ -184,5 +184,5 @@ fi
 if "$first_install"; then
     printf '%s\n' "$backup" > "$state/latest"
 fi
-echo "Blue Ocean terpasang. Cadangan: $backup"
-echo 'Keluar dan masuk lagi bila Open Bar belum langsung aktif di GNOME Wayland.'
+echo "Blue Ocean installed. Backup: $backup"
+echo 'Sign out and back in if Open Bar does not appear immediately on GNOME Wayland.'

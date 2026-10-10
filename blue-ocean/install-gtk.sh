@@ -18,7 +18,7 @@ url = 'https://codeload.github.com/vinceliuice/Colloid-gtk-theme/tar.gz/refs/tag
 expected = '58ca27f47a2ba0d7de441ea3ed8a42c8f42b693d8935c4836f6bf5ba7fc84cc1'
 archive = urlopen(url, timeout=45).read()
 if sha256(archive).hexdigest() != expected:
-    raise SystemExit('Checksum sumber Colloid tidak cocok')
+    raise SystemExit('Colloid source checksum mismatch')
 destination = Path(sys.argv[1])
 with tarfile.open(fileobj=BytesIO(archive), mode='r:gz') as bundle:
     bundle.extractall(destination.parent, filter='data')
@@ -28,11 +28,11 @@ PY
 
 if ! command -v sassc >/dev/null 2>&1; then
     [[ "$(dpkg --print-architecture)" == amd64 ]] || {
-        echo 'Perlu sassc terpasang pada arsitektur selain amd64.' >&2
+        echo 'sassc must be installed on architectures other than amd64.' >&2
         exit 1
     }
     for app in apt-get dpkg-deb sha256sum; do
-        command -v "$app" >/dev/null || { echo "Perlu $app" >&2; exit 1; }
+        command -v "$app" >/dev/null || { echo "Missing required command: $app" >&2; exit 1; }
     done
     (
         cd "$temp/runtime"
@@ -59,7 +59,7 @@ name=Colloid-Dark-Compact-Nord
 generated="$temp/themes/$name"
 [[ -s "$generated/gtk-3.0/gtk.css" && -s "$generated/gtk-4.0/gtk.css" && \
    -s "$temp/home/.config/gtk-4.0/gtk.css" ]] || {
-    echo 'Hasil build tema GTK tidak lengkap.' >&2
+    echo 'The generated GTK theme is incomplete.' >&2
     exit 1
 }
 

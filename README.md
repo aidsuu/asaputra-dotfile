@@ -1,41 +1,52 @@
-# Blue Ocean · Debian GNOME dotfiles
+<h1 align="center">BLUE OCEAN</h1>
 
-Tema Debian 13 + GNOME 48 bernuansa samudra. Inspirasi tata letaknya berasal dari [rion-ricing](https://github.com/SeraphimeZelel/rion-ricing): panel atas terpisah menjadi pulau kecil, terminal dengan identitas visual yang jelas, dan desktop tanpa dock permanen. Palet, wallpaper, dan konfigurasi di sini dibuat untuk Blue Ocean.
+<p align="center">A quiet GNOME desktop with deep blues, soft light, and room to breathe.</p>
+<p align="center"><code>Debian 13</code> · <code>GNOME 48</code> · <code>Wayland</code> · <code>Kitty</code></p>
 
-![Wallpaper Blue Ocean](blue-ocean/wallpaper/blue-ocean-v2.png)
+<p align="center">
+  <img src="blue-ocean/wallpaper/blue-ocean-v2.png" alt="Blue Ocean wallpaper showing illuminated waves at night" width="920">
+</p>
 
-## Isi
+## The setup
 
-- `blue-ocean/wallpaper/blue-ocean-v2.png` — wallpaper aktif.
-- `blue-ocean/theme/gnome-shell/gnome-shell.css` — menu, quick settings, kalender, pencarian, dan notifikasi bernuansa laut.
-- `blue-ocean/kitty/kitty.conf` — terminal gelap dengan aksen cyan, dibuat tetap mudah dibaca di atas aplikasi lain.
-- `blue-ocean/install-gtk.sh` — membangun Colloid Nord Dark Compact untuk GTK3 dan GTK4 di folder pengguna.
-- `blue-ocean/fastfetch/config.jsonc` dan `blue-ocean/shell/prompt.bash` — ringkasan sistem dan prompt Bash dua baris.
-- `blue-ocean/install-components.sh` — memasang Open Bar 49, Blur My Shell 74, dan ikon Papirus ke folder pengguna tanpa `sudo`.
-- `blue-ocean/install.sh` dan `blue-ocean/restore.sh` — menerapkan dan mengembalikan pengaturan.
+| Layer | Design |
+| --- | --- |
+| Desktop | An original ocean wallpaper, a slim island-style top bar, and no persistent dock. Press `Super` for the app overview. |
+| Applications | Colloid Nord Dark Compact for GTK 3 and GTK 4, with Papirus-Dark icons and a blue accent. |
+| Terminal | A frameless Kitty window with a dimmed ocean background, clear text, and a restrained cyan palette. |
+| Shell | Blue Ocean menus, quick settings, search, and notifications; a softly blurred overview. |
 
-Open Bar mengatur panel **Islands** yang tipis di sisi atas. Dash to Dock dinonaktifkan; tombol `Super` tetap membuka Overview untuk memilih aplikasi. Blur My Shell tetap dipakai di Overview, sehingga tidak mengganggu bentuk panel Open Bar.
-
-## Pasang
-
-```bash
-cd blue-ocean
-./install.sh
-```
-
-Installer menyimpan snapshot pengaturan awal di `~/.local/state/blue-ocean-gnome/backups/`. Pemasangan ulang mempertahankan snapshot tersebut. Koneksi internet dan repositori Debian diperlukan bila komponen belum ada. Jika Open Bar belum muncul setelah pemasangan, keluar lalu masuk lagi ke sesi GNOME Wayland.
-
-## Kembalikan
+## Install
 
 ```bash
-cd blue-ocean
-./restore.sh
+git clone https://github.com/aidsuu/asaputra-dotfile.git
+cd asaputra-dotfile
+./blue-ocean/install.sh
 ```
 
-Pemulihan mengembalikan pengaturan, ekstensi, tema GTK, file Kitty, Fastfetch, dan `.bashrc` dari snapshot. Perubahan pada bidang yang sama setelah pemasangan akan tertimpa ketika snapshot dipulihkan.
+The installer saves the original settings in `~/.local/state/blue-ocean-gnome/backups/` before changing them. Re-running it keeps that original backup. Everything is installed in the user account; Debian amd64 does not require `sudo`. The build downloads pinned sources and Debian packages, so an internet connection is required. If Open Bar does not appear immediately, sign out and back in.
 
-## Komponen
+## Restore
 
-GNOME Shell 48, `gsettings`, `dconf`, `apt-get`, `dpkg-deb`, `glib-compile-schemas`, dan Python 3. Installer memverifikasi SHA-256 rilis [Open Bar](https://github.com/neuromorph/openbar), [Blur My Shell](https://github.com/aunetx/blur-my-shell), paket [Papirus](https://github.com/PapirusDevelopmentTeam/papirus-icon-theme), dan sumber [Colloid GTK](https://github.com/vinceliuice/Colloid-gtk-theme) tag `2026-08-08`. Colloid dibangun dengan `sassc` dari paket Debian yang juga diverifikasi; tidak membutuhkan `sudo` pada Debian amd64. Pemasangan ulang GTK memerlukan koneksi internet. User Themes dan Kitty dilewati jika tidak tersedia. Fastfetch bersifat opsional; bila tersedia, ringkasan sistem muncul saat Kitty dibuka.
+```bash
+./blue-ocean/restore.sh
+```
 
-Rion menggunakan Fedora, Pywal, Wofi, dan wallpaper game. Konfigurasi tersebut tidak disalin karena Blue Ocean diarahkan untuk Debian GNOME dengan wallpaper samudra dan terminal Kitty.
+This restores the saved desktop settings, GTK files, extensions, Kitty configuration, Fastfetch configuration, and `.bashrc`. Changes made to those same files after installation will be replaced by the backup.
+
+## What's inside
+
+```text
+blue-ocean/
+├── wallpaper/            ocean artwork
+├── theme/gnome-shell/    Shell styling
+├── kitty/                terminal appearance
+├── fastfetch/            compact system summary
+├── shell/                Bash prompt
+├── install-components.sh pinned GNOME extensions and Papirus icons
+├── install-gtk.sh        Colloid GTK build
+├── install.sh            apply the desktop
+└── restore.sh            restore the saved setup
+```
+
+The installer verifies SHA-256 checksums for [Open Bar](https://github.com/neuromorph/openbar), [Blur My Shell](https://github.com/aunetx/blur-my-shell), [Papirus](https://github.com/PapirusDevelopmentTeam/papirus-icon-theme), and [Colloid GTK](https://github.com/vinceliuice/Colloid-gtk-theme). Colloid is built from the `2026-08-08` source tag. Fastfetch and Kitty are optional; their configuration is applied when they are present.
