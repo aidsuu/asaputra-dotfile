@@ -190,7 +190,7 @@ stage {
 }
 
 .blue-ocean-window-border {
-  box-shadow: 0 0 14px 2px rgba(77, 210, 251, 0.42) !important;
+  box-shadow: 0 0 9px 1px rgba(77, 165, 199, 0.20) !important;
 }
 
 /* Other Shell surfaces keep the same palette. */

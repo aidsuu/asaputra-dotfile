@@ -13,7 +13,7 @@
 | --- | --- |
 | Desktop | An original ocean wallpaper, a slim island-style top bar, and no persistent dock. Press `Super` for the app overview. |
 | Applications | Colloid Nord Dark Compact for GTK 3 and GTK 4, with Papirus-Dark icons and a blue accent. |
-| Terminal | A frameless Kitty window with a dimmed ocean background, clear text, and a luminous cyan outline that brightens on focus. |
+| Terminal | A frameless Kitty window with a dimmed ocean background, clear text, and a soft blue outline that brightens on focus. |
 | Shell | Blue Ocean menus, quick settings, search, and notifications; a softly blurred overview. |
 
 ## Install

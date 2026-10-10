@@ -175,11 +175,11 @@ settings.set_boolean('use-shipped-configs', False)
 settings.set_string('rules', json.dumps({
     'class:kitty': {
         'enabled': True,
-        'width': 3,
-        'margins': 2,
+        'width': 2,
+        'margins': 1,
         'radius': 14,
-        'activeColor': 'rgba(90, 220, 255, 0.96)',
-        'inactiveColor': 'rgba(70, 143, 170, 0.48)',
+        'activeColor': 'rgba(96, 176, 205, 0.76)',
+        'inactiveColor': 'rgba(64, 115, 137, 0.32)',
     },
 }, separators=(',', ':')))
 PY
