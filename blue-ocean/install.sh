@@ -65,6 +65,11 @@ fi
 backup_file fastfetch "$HOME/.config/fastfetch/config.jsonc"
 backup_file bashrc "$HOME/.bashrc"
 backup_file prompt "$HOME/.config/blue-ocean/prompt.bash"
+backup_file colloid-theme "$HOME/.themes/Colloid-Dark-Compact-Nord"
+backup_file gtk4-css "$HOME/.config/gtk-4.0/gtk.css"
+backup_file gtk4-dark-css "$HOME/.config/gtk-4.0/gtk-dark.css"
+backup_file gtk4-assets "$HOME/.config/gtk-4.0/assets"
+"$root/install-gtk.sh"
 rm -rf -- "$HOME/.themes/Blue-Ocean"
 cp -a -- "$root/theme" "$HOME/.themes/Blue-Ocean"
 cp -- "$root/wallpaper/blue-ocean-v2.png" "$HOME/.local/share/backgrounds/blue-ocean.png"
@@ -93,7 +98,7 @@ PY
 
 gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
 gsettings set org.gnome.desktop.interface accent-color 'blue'
-gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita'
+gsettings set org.gnome.desktop.interface gtk-theme 'Colloid-Dark-Compact-Nord'
 gsettings set org.gnome.desktop.interface icon-theme 'Papirus-Dark'
 gsettings set org.gnome.desktop.interface cursor-theme 'Bibata-Material-Deep-Blue'
 gsettings set org.gnome.desktop.interface font-name 'Cantarell 11'

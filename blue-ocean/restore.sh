@@ -58,6 +58,17 @@ for entry in \
     fi
 done
 for entry in \
+    "colloid-theme:$HOME/.themes/Colloid-Dark-Compact-Nord" \
+    "gtk4-css:$HOME/.config/gtk-4.0/gtk.css" \
+    "gtk4-dark-css:$HOME/.config/gtk-4.0/gtk-dark.css" \
+    "gtk4-assets:$HOME/.config/gtk-4.0/assets"; do
+    name="${entry%%:*}"
+    target="${entry#*:}"
+    if [[ -e "$backup/$name" || -e "$backup/$name.absent" ]]; then
+        restore_file "$name" "$target"
+    fi
+done
+for entry in \
     "dock-extension:$HOME/.local/share/gnome-shell/extensions/dash-to-dock@micxgx.gmail.com" \
     "blur-extension:$HOME/.local/share/gnome-shell/extensions/blur-my-shell@aunetx" \
     "openbar-extension:$HOME/.local/share/gnome-shell/extensions/openbar@neuromorph" \

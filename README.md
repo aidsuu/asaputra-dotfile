@@ -9,6 +9,7 @@ Tema Debian 13 + GNOME 48 bernuansa samudra. Inspirasi tata letaknya berasal dar
 - `blue-ocean/wallpaper/blue-ocean-v2.png` — wallpaper aktif.
 - `blue-ocean/theme/gnome-shell/gnome-shell.css` — menu, quick settings, kalender, pencarian, dan notifikasi bernuansa laut.
 - `blue-ocean/kitty/kitty.conf` — terminal gelap dengan aksen cyan, dibuat tetap mudah dibaca di atas aplikasi lain.
+- `blue-ocean/install-gtk.sh` — membangun Colloid Nord Dark Compact untuk GTK3 dan GTK4 di folder pengguna.
 - `blue-ocean/fastfetch/config.jsonc` dan `blue-ocean/shell/prompt.bash` — ringkasan sistem dan prompt Bash dua baris.
 - `blue-ocean/install-components.sh` — memasang Open Bar 49, Blur My Shell 74, dan ikon Papirus ke folder pengguna tanpa `sudo`.
 - `blue-ocean/install.sh` dan `blue-ocean/restore.sh` — menerapkan dan mengembalikan pengaturan.
@@ -31,10 +32,10 @@ cd blue-ocean
 ./restore.sh
 ```
 
-Pemulihan mengembalikan pengaturan, ekstensi, file Kitty, Fastfetch, dan `.bashrc` dari snapshot. Perubahan pada bidang yang sama setelah pemasangan akan tertimpa ketika snapshot dipulihkan.
+Pemulihan mengembalikan pengaturan, ekstensi, tema GTK, file Kitty, Fastfetch, dan `.bashrc` dari snapshot. Perubahan pada bidang yang sama setelah pemasangan akan tertimpa ketika snapshot dipulihkan.
 
 ## Komponen
 
-GNOME Shell 48, `gsettings`, `dconf`, `apt-get`, `dpkg-deb`, `glib-compile-schemas`, dan Python 3. Installer memverifikasi SHA-256 rilis [Open Bar](https://github.com/neuromorph/openbar), [Blur My Shell](https://github.com/aunetx/blur-my-shell), dan paket [Papirus](https://github.com/PapirusDevelopmentTeam/papirus-icon-theme). User Themes dan Kitty dilewati jika tidak tersedia. Fastfetch bersifat opsional; bila tersedia, ringkasan sistem muncul saat Kitty dibuka.
+GNOME Shell 48, `gsettings`, `dconf`, `apt-get`, `dpkg-deb`, `glib-compile-schemas`, dan Python 3. Installer memverifikasi SHA-256 rilis [Open Bar](https://github.com/neuromorph/openbar), [Blur My Shell](https://github.com/aunetx/blur-my-shell), paket [Papirus](https://github.com/PapirusDevelopmentTeam/papirus-icon-theme), dan sumber [Colloid GTK](https://github.com/vinceliuice/Colloid-gtk-theme) tag `2026-08-08`. Colloid dibangun dengan `sassc` dari paket Debian yang juga diverifikasi; tidak membutuhkan `sudo` pada Debian amd64. Pemasangan ulang GTK memerlukan koneksi internet. User Themes dan Kitty dilewati jika tidak tersedia. Fastfetch bersifat opsional; bila tersedia, ringkasan sistem muncul saat Kitty dibuka.
 
 Rion menggunakan Fedora, Pywal, Wofi, dan wallpaper game. Konfigurasi tersebut tidak disalin karena Blue Ocean diarahkan untuk Debian GNOME dengan wallpaper samudra dan terminal Kitty.
