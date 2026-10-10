@@ -164,8 +164,8 @@ else
 fi
 dconf write "$bar/bartype" "'Islands'"
 dconf write "$bar/position" "'Top'"
-dconf write "$bar/height" '32.0'
-dconf write "$bar/margin" '4.0'
+dconf write "$bar/height" '24.0'
+dconf write "$bar/margin" '1.0'
 dconf write "$bar/set-bottom-margin" 'false'
 dconf write "$bar/set-overview" 'true'
 dconf write "$bar/set-fullscreen" 'false'
@@ -179,15 +179,15 @@ dconf write "$bar/bcolor" "$bar_bcolor"
 dconf write "$bar/dark-bcolor" "$bar_bcolor"
 dconf write "$bar/balpha" '0.55'
 dconf write "$bar/bwidth" '1.0'
-dconf write "$bar/bradius" '18.0'
+dconf write "$bar/bradius" '13.0'
 dconf write "$bar/neon" 'false'
 dconf write "$bar/shadow" 'true'
 dconf write "$bar/shalpha" '0.24'
 dconf write "$bar/hcolor" "$bar_hcolor"
 dconf write "$bar/dark-hcolor" "$bar_hcolor"
 dconf write "$bar/halpha" '0.27'
-dconf write "$bar/hpad" '2.0'
-dconf write "$bar/vpad" '2.0'
+dconf write "$bar/hpad" '1.0'
+dconf write "$bar/vpad" '0.0'
 dconf write "$bar/menustyle" 'false'
 dconf write "$bar/autotheme-refresh" 'false'
 
