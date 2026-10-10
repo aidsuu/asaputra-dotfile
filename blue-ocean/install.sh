@@ -182,8 +182,8 @@ dconf write "$bar/balpha" '0.55'
 dconf write "$bar/bwidth" '1.0'
 dconf write "$bar/bradius" '13.0'
 dconf write "$bar/neon" 'false'
-dconf write "$bar/shadow" 'true'
-dconf write "$bar/shalpha" '0.24'
+dconf write "$bar/shadow" 'false'
+dconf write "$bar/shalpha" '0.0'
 dconf write "$bar/hcolor" "$bar_hcolor"
 dconf write "$bar/dark-hcolor" "$bar_hcolor"
 dconf write "$bar/halpha" '0.27'
