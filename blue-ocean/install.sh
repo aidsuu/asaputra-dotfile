@@ -59,6 +59,7 @@ gsettings set org.gnome.desktop.interface icon-theme 'Adwaita'
 gsettings set org.gnome.desktop.interface cursor-theme 'Bibata-Material-Deep-Blue'
 gsettings set org.gnome.desktop.interface font-name 'Cantarell 11'
 gsettings set org.gnome.desktop.interface monospace-font-name 'Noto Sans Mono 11'
+gsettings set org.gnome.desktop.interface clock-show-date false
 wallpaper_uri="file://$HOME/.local/share/backgrounds/blue-ocean.png"
 gsettings set org.gnome.desktop.background picture-uri-dark "file://$root/wallpaper/blue-ocean-v2.png"
 gsettings set org.gnome.desktop.background picture-uri "$wallpaper_uri"
@@ -74,11 +75,13 @@ fi
 
 if gnome-extensions info dash-to-panel@jderose9.github.com >/dev/null 2>&1; then
     dconf write /org/gnome/shell/extensions/dash-to-panel/panel-lengths "'{\"CMN-0x00000000\":-1,\"SAM-0x00000000\":-1}'"
-    dconf write /org/gnome/shell/extensions/dash-to-panel/panel-sizes "'{\"CMN-0x00000000\":48,\"SAM-0x00000000\":48}'"
-    dconf write /org/gnome/shell/extensions/dash-to-panel/global-border-radius '5'
-    dconf write /org/gnome/shell/extensions/dash-to-panel/panel-top-bottom-margins '12'
+    dconf write /org/gnome/shell/extensions/dash-to-panel/panel-sizes "'{\"CMN-0x00000000\":36,\"SAM-0x00000000\":36}'"
+    dconf write /org/gnome/shell/extensions/dash-to-panel/global-border-radius '4'
+    dconf write /org/gnome/shell/extensions/dash-to-panel/panel-top-bottom-margins '8'
     dconf write /org/gnome/shell/extensions/dash-to-panel/panel-side-margins '0'
-    dconf write /org/gnome/shell/extensions/dash-to-panel/appicon-padding '8'
+    dconf write /org/gnome/shell/extensions/dash-to-panel/appicon-padding '3'
+    dconf write /org/gnome/shell/extensions/dash-to-panel/show-apps-icon-side-padding '2'
+    dconf write /org/gnome/shell/extensions/dash-to-panel/status-icon-padding '2'
     dconf write /org/gnome/shell/extensions/dash-to-panel/trans-use-custom-opacity 'true'
     dconf write /org/gnome/shell/extensions/dash-to-panel/trans-panel-opacity '0.90'
     dconf write /org/gnome/shell/extensions/dash-to-panel/trans-use-border 'true'

@@ -7,24 +7,24 @@ stage {
   color: #e9f5fb;
 }
 
-/* A compact floating command deck, shaped by Dash to Panel margins. */
+/* A small floating dock, shaped by Dash to Panel margins. */
 #panel {
-  background-color: rgba(5, 24, 39, 0.94) !important;
-  border: 1px solid rgba(114, 203, 227, 0.34) !important;
-  border-radius: 19px !important;
-  box-shadow: 0 10px 34px rgba(1, 12, 24, 0.46) !important;
+  background-color: rgba(5, 24, 39, 0.88) !important;
+  border: 1px solid rgba(114, 203, 227, 0.25) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 8px 26px rgba(1, 12, 24, 0.36) !important;
   color: #edf8fd !important;
 }
 
 .dashtopanelPanel.dock {
-  border-radius: 20px !important;
-  box-shadow: 0 10px 34px rgba(1, 12, 24, 0.42) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 8px 26px rgba(1, 12, 24, 0.36) !important;
 }
 
 #panel .panel-button {
   color: #e9f5fb !important;
   border: 2px solid transparent !important;
-  border-radius: 14px !important;
+  border-radius: 10px !important;
   font-weight: 600;
 }
 
