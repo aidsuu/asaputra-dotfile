@@ -1,0 +1,54 @@
+/* Blue Ocean: quiet surfaces for GNOME Shell 48. */
+#panel {
+    background-color: rgba(7, 23, 38, 0.89) !important;
+    box-shadow: inset 0 -1px rgba(103, 182, 218, 0.18) !important;
+}
+
+#panel .panel-button {
+    color: #e7f3fb !important;
+    border-radius: 11px !important;
+}
+
+#panel .panel-button:hover,
+#panel .panel-button:focus,
+#panel .panel-button:active {
+    background-color: rgba(83, 171, 215, 0.19) !important;
+}
+
+.popup-menu-content,
+.quick-settings,
+.notification-banner,
+.message-list,
+.datemenu-calendar-column {
+    background-color: rgba(9, 28, 44, 0.96) !important;
+    border: 1px solid rgba(117, 188, 219, 0.19) !important;
+    border-radius: 16px !important;
+    color: #e7f3fb !important;
+    box-shadow: 0 12px 34px rgba(2, 11, 20, 0.39) !important;
+}
+
+.quick-toggle,
+.quick-menu-toggle .quick-toggle {
+    border-radius: 12px !important;
+}
+
+.quick-toggle:checked,
+.quick-menu-toggle .quick-toggle:checked {
+    background-color: #277da7 !important;
+    color: #f6fcff !important;
+}
+
+.calendar-today,
+.calendar-today:active,
+.calendar-today:selected {
+    background-color: rgba(68, 161, 205, 0.30) !important;
+    color: #f5fbff !important;
+    border-radius: 99px !important;
+}
+
+.dash-background,
+#dash .dash-background {
+    background-color: rgba(8, 27, 42, 0.75) !important;
+    border: 1px solid rgba(117, 188, 219, 0.16) !important;
+    border-radius: 16px !important;
+}
