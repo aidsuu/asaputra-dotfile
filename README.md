@@ -1,13 +1,13 @@
 # Blue Ocean · Debian GNOME dotfiles
 
-Tema minimalis gelap untuk Debian 13 + GNOME 48. Dibuat agar tetap dekat dengan tampilan asli GNOME: Adwaita, aksen biru, wallpaper laut abstrak, panel bawah yang ringkas, dan terminal biru gelap.
+Tema minimalis gelap untuk Debian 13 + GNOME 48. Versi 2 memakai wallpaper samudra, panel bawah mengambang, serta permukaan biru gelap yang konsisten pada menu, quick settings, kalender, pencarian, dan notifikasi.
 
 ## Isi
 
-- `blue-ocean/wallpaper/blue-ocean.png` — wallpaper 1920 × 1080.
-- `blue-ocean/theme/gnome-shell/gnome-shell.css` — warna panel, menu, dan notifikasi.
+- `blue-ocean/wallpaper/blue-ocean-v2.png` — wallpaper aktif; `blue-ocean.png` tetap tersedia sebagai versi awal.
+- `blue-ocean/theme/gnome-shell/gnome-shell.css` — gaya Shell yang memuat stylesheet gelap GNOME 48 sebagai dasar, lalu mengubah panel, menu, quick settings, kalender, pencarian, dan notifikasi.
 - `blue-ocean/kitty/kitty.conf` — palet terminal Kitty.
-- `blue-ocean/generate_wallpaper.py` — sumber wallpaper yang dapat dibuat ulang dengan Pillow.
+- `blue-ocean/generate_wallpaper.py` — pembuat wallpaper versi awal dengan Pillow; wallpaper v2 adalah aset gambar tersendiri.
 - `blue-ocean/install.sh` dan `restore.sh` — penerapan dan pemulihan pengaturan.
 
 ## Pasang
@@ -17,7 +17,7 @@ cd blue-ocean
 ./install.sh
 ```
 
-Installer menyimpan snapshot pengaturan di `~/.local/state/blue-ocean-gnome/backups/` sebelum mengubahnya. Tidak memakai `sudo`. Sesi GNOME Wayland mungkin perlu keluar lalu masuk lagi agar semua perubahan Shell terlihat.
+Installer menyimpan snapshot pengaturan awal di `~/.local/state/blue-ocean-gnome/backups/` sebelum mengubahnya. Pemasangan ulang mempertahankan snapshot awal itu. Tidak memakai `sudo`. Sesi GNOME Wayland mungkin perlu keluar lalu masuk lagi agar semua perubahan Shell terlihat.
 
 ## Kembalikan
 
@@ -30,4 +30,6 @@ Pemulihan memakai snapshot terbaru yang dibuat saat pemasangan. Jika Anda mengub
 
 ## Perangkat lunak
 
-GNOME Shell, `gsettings`, `dconf`, User Themes, Dash to Panel, dan Kitty. Installer akan melewati bagian ekstensi atau Kitty yang tidak ada. Pillow hanya dibutuhkan untuk membuat ulang wallpaper, bukan untuk memasang tema.
+GNOME Shell 48, `gsettings`, `dconf`, User Themes, Dash to Panel, dan Kitty. Installer akan melewati bagian ekstensi atau Kitty yang tidak ada. Pillow hanya dibutuhkan untuk membuat ulang wallpaper awal, bukan untuk memasang tema.
+
+Dasar teknis: [tema Shell GNOME 48](https://github.com/varunbpatil/Darkwaita) dan [pengaturan Dash to Panel](https://github.com/home-sweet-gnome/dash-to-panel/wiki/Enable-and-Customize). Blue Ocean memakai palet, bentuk, dan aset sendiri.

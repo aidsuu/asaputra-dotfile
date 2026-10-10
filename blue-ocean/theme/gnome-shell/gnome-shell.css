@@ -1,54 +1,246 @@
-/* Blue Ocean: quiet surfaces for GNOME Shell 48. */
+/* Blue Ocean v2 for GNOME Shell 48.
+ * Keep the complete GNOME stylesheet underneath so dialogs, OSDs and
+ * extension widgets retain their expected layout and interaction states. */
+@import url("resource:///org/gnome/shell/theme/gnome-shell-dark.css");
+
+stage {
+  color: #e9f5fb;
+}
+
+/* A compact floating command deck, shaped by Dash to Panel margins. */
 #panel {
-    background-color: rgba(7, 23, 38, 0.89) !important;
-    box-shadow: inset 0 -1px rgba(103, 182, 218, 0.18) !important;
+  background-color: rgba(5, 24, 39, 0.94) !important;
+  border: 1px solid rgba(114, 203, 227, 0.34) !important;
+  border-radius: 19px !important;
+  box-shadow: 0 10px 34px rgba(1, 12, 24, 0.46),
+              inset 0 1px rgba(216, 248, 255, 0.14) !important;
+  color: #edf8fd !important;
 }
 
 #panel .panel-button {
-    color: #e7f3fb !important;
-    border-radius: 11px !important;
+  color: #e9f5fb !important;
+  border: 2px solid transparent !important;
+  border-radius: 14px !important;
+  font-weight: 600;
 }
 
 #panel .panel-button:hover,
-#panel .panel-button:focus,
-#panel .panel-button:active {
-    background-color: rgba(83, 171, 215, 0.19) !important;
+#panel .panel-button:focus {
+  background-color: rgba(71, 163, 199, 0.20) !important;
+  box-shadow: inset 0 0 0 1px rgba(124, 209, 230, 0.17) !important;
 }
 
+#panel .panel-button:active,
+#panel .panel-button:checked {
+  background-color: rgba(53, 164, 204, 0.30) !important;
+  box-shadow: inset 0 0 0 1px rgba(126, 220, 240, 0.30) !important;
+}
+
+#panel .system-status-icon {
+  color: #b4dce9 !important;
+}
+
+/* Menus and popovers use a layered midnight glass surface. */
 .popup-menu-content,
+.candidate-popup-content,
 .quick-settings,
-.notification-banner,
-.message-list,
-.datemenu-calendar-column {
-    background-color: rgba(9, 28, 44, 0.96) !important;
-    border: 1px solid rgba(117, 188, 219, 0.19) !important;
-    border-radius: 16px !important;
-    color: #e7f3fb !important;
-    box-shadow: 0 12px 34px rgba(2, 11, 20, 0.39) !important;
+.calendar,
+.modal-dialog,
+.quick-toggle-menu {
+  background-color: rgba(7, 27, 44, 0.98) !important;
+  border: 1px solid rgba(105, 191, 220, 0.23) !important;
+  border-radius: 22px !important;
+  box-shadow: 0 18px 48px rgba(1, 11, 24, 0.48),
+              inset 0 1px rgba(204, 245, 255, 0.07) !important;
+  color: #e9f5fb !important;
+}
+
+.popup-menu-item {
+  border-radius: 12px !important;
+  color: #dceef7 !important;
+}
+
+.popup-menu-item:hover,
+.popup-menu-item:checked,
+.popup-menu-item:active,
+.popup-menu-item:selected {
+  background-color: rgba(53, 151, 191, 0.25) !important;
+  color: #ffffff !important;
+}
+
+.popup-separator-menu-item .popup-separator-menu-item-separator {
+  background-color: rgba(112, 193, 218, 0.19) !important;
+}
+
+/* Quick settings: quiet cards, vivid cyan active state. */
+.quick-settings {
+  padding: 18px !important;
+}
+
+.quick-settings-grid {
+  spacing-rows: 11px;
+  spacing-columns: 11px;
 }
 
 .quick-toggle,
-.quick-menu-toggle .quick-toggle {
-    border-radius: 12px !important;
+.quick-toggle-has-menu .quick-toggle,
+.quick-toggle-has-menu .quick-toggle-menu-button,
+.quick-slider .slider-bin {
+  background-color: #12364e !important;
+  color: #e6f4fa !important;
+  border: 1px solid rgba(132, 204, 227, 0.12) !important;
+}
+
+.quick-toggle {
+  border-radius: 15px !important;
+}
+
+.quick-toggle-has-menu .quick-toggle:ltr {
+  border-radius: 15px 0 0 15px !important;
+}
+
+.quick-toggle-has-menu .quick-toggle-menu-button:ltr {
+  border-radius: 0 15px 15px 0 !important;
+}
+
+.quick-toggle:hover,
+.quick-toggle-has-menu .quick-toggle-menu-button:hover,
+.quick-slider .slider-bin:hover {
+  background-color: #1a4b67 !important;
 }
 
 .quick-toggle:checked,
-.quick-menu-toggle .quick-toggle:checked {
-    background-color: #277da7 !important;
-    color: #f6fcff !important;
+.quick-toggle-has-menu .quick-toggle:checked,
+.quick-toggle-has-menu .quick-toggle-menu-button:checked {
+  background-color: #338fb6 !important;
+  color: #ffffff !important;
+  border-color: #5cbedc !important;
 }
 
-.calendar-today,
-.calendar-today:active,
-.calendar-today:selected {
-    background-color: rgba(68, 161, 205, 0.30) !important;
-    color: #f5fbff !important;
-    border-radius: 99px !important;
+.quick-toggle .quick-toggle-subtitle {
+  color: #aac9d8 !important;
+}
+
+/* Calendar and notifications. */
+.datemenu-today-button,
+.events-button,
+.world-clocks-button,
+.weather-button,
+.message {
+  background-color: #113249 !important;
+  border: 1px solid rgba(108, 187, 215, 0.12) !important;
+  border-radius: 16px !important;
+}
+
+.datemenu-today-button:hover,
+.events-button:hover,
+.world-clocks-button:hover,
+.weather-button:hover {
+  background-color: #194660 !important;
+}
+
+.calendar .calendar-month-header .calendar-month-label {
+  color: #a8e3f2 !important;
+}
+
+.calendar .calendar-day.calendar-today {
+  background-color: #338fb6 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 0 2px rgba(145, 221, 239, 0.22) !important;
+}
+
+.calendar .calendar-day:hover,
+.calendar .calendar-day:focus {
+  background-color: rgba(77, 174, 208, 0.24) !important;
+}
+
+.message-list {
+  border-color: rgba(116, 191, 217, 0.18) !important;
+}
+
+.message .message-header,
+.message-list .message-list-placeholder {
+  color: #afcbd9 !important;
+}
+
+.notification-banner {
+  background-color: rgba(9, 33, 51, 0.98) !important;
+  border: 1px solid rgba(107, 201, 227, 0.29) !important;
+  border-radius: 17px !important;
+  box-shadow: 0 12px 36px rgba(1, 11, 24, 0.43) !important;
+}
+
+/* Search and app overview. */
+.search-entry {
+  background-color: rgba(7, 28, 45, 0.97) !important;
+  border: 1px solid rgba(117, 199, 225, 0.40) !important;
+  border-radius: 17px !important;
+  color: #f0f9fc !important;
+  box-shadow: 0 8px 28px rgba(0, 15, 30, 0.28) !important;
+}
+
+.search-entry:focus {
+  border-color: #72cde8 !important;
+  box-shadow: inset 0 0 0 1px rgba(149, 225, 242, 0.50),
+              0 8px 28px rgba(0, 15, 30, 0.28) !important;
+}
+
+.search-section-content {
+  background-color: rgba(9, 32, 50, 0.94) !important;
+  border: 1px solid rgba(113, 191, 218, 0.14) !important;
+  border-radius: 20px !important;
+  color: #e9f5fb !important;
+}
+
+.overview-tile,
+.grid-search-result,
+.list-search-result {
+  color: #eaf6fb !important;
+  border-radius: 17px !important;
+}
+
+.overview-tile:hover,
+.grid-search-result:hover,
+.list-search-result:hover,
+.overview-tile:focus,
+.grid-search-result:focus,
+.list-search-result:focus {
+  background-color: rgba(48, 140, 180, 0.25) !important;
+  box-shadow: inset 0 0 0 1px rgba(127, 207, 229, 0.22) !important;
 }
 
 .dash-background,
 #dash .dash-background {
-    background-color: rgba(8, 27, 42, 0.75) !important;
-    border: 1px solid rgba(117, 188, 219, 0.16) !important;
-    border-radius: 16px !important;
+  background-color: rgba(7, 28, 45, 0.87) !important;
+  border: 1px solid rgba(110, 198, 225, 0.23) !important;
+  border-radius: 19px !important;
+  box-shadow: 0 10px 30px rgba(0, 12, 26, 0.35) !important;
+}
+
+.workspace-thumbnail-indicator {
+  border-color: #77d2e9 !important;
+  border-radius: 13px !important;
+}
+
+/* Other Shell surfaces keep the same palette. */
+.osd-window,
+.switcher-list,
+.run-dialog,
+.end-session-dialog,
+.screenshot-ui-panel {
+  background-color: rgba(7, 27, 44, 0.97) !important;
+  border: 1px solid rgba(105, 191, 220, 0.23) !important;
+  border-radius: 20px !important;
+  color: #e9f5fb !important;
+  box-shadow: 0 18px 48px rgba(1, 11, 24, 0.43) !important;
+}
+
+.button,
+.icon-button {
+  border-radius: 12px !important;
+}
+
+.button:focus,
+.icon-button:focus {
+  box-shadow: inset 0 0 0 2px rgba(128, 219, 239, 0.55) !important;
 }
