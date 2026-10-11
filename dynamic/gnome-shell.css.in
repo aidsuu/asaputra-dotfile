@@ -1,0 +1,102 @@
+/* Dynamic GNOME Shell palette. Generated from the active wallpaper. */
+@import url("resource:///org/gnome/shell/theme/gnome-shell-@BASE_THEME@.css");
+
+stage { color: @FG@; }
+
+.popup-menu-content,
+.candidate-popup-content,
+.quick-settings,
+.calendar,
+.modal-dialog,
+.quick-toggle-menu,
+.notification-banner,
+.osd-window,
+.switcher-list,
+.run-dialog,
+.end-session-dialog,
+.screenshot-ui-panel {
+  background-color: @SURFACE@ !important;
+  color: @FG@ !important;
+  border: 1px solid @BORDER_SOFT@ !important;
+  border-radius: 20px !important;
+  box-shadow: 0 12px 32px @SHADOW@ !important;
+}
+
+.popup-menu-item,
+.overview-tile,
+.grid-search-result,
+.list-search-result {
+  color: @FG@ !important;
+  border-radius: 12px !important;
+}
+
+.popup-menu-item:hover,
+.popup-menu-item:checked,
+.popup-menu-item:active,
+.popup-menu-item:selected,
+.overview-tile:hover,
+.grid-search-result:hover,
+.list-search-result:hover {
+  background-color: @HOVER@ !important;
+  color: @FG@ !important;
+}
+
+.quick-toggle,
+.quick-toggle-has-menu .quick-toggle,
+.quick-toggle-has-menu .quick-toggle-menu-button,
+.quick-slider .slider-bin,
+.datemenu-today-button,
+.events-button,
+.world-clocks-button,
+.weather-button,
+.message,
+.search-section-content {
+  background-color: @CARD@ !important;
+  color: @FG@ !important;
+  border: 1px solid @BORDER_SOFT@ !important;
+  border-radius: 14px !important;
+}
+
+.quick-toggle:checked,
+.quick-toggle-has-menu .quick-toggle:checked,
+.quick-toggle-has-menu .quick-toggle-menu-button:checked,
+.calendar .calendar-day.calendar-today {
+  background-color: @ACCENT@ !important;
+  color: @ACCENT_FG@ !important;
+  border-color: @ACCENT@ !important;
+}
+
+.search-entry {
+  background-color: @CARD@ !important;
+  color: @FG@ !important;
+  border: 1px solid @BORDER@ !important;
+  border-radius: 16px !important;
+  box-shadow: none !important;
+}
+
+.search-entry:focus,
+.workspace-thumbnail-indicator {
+  border-color: @ACCENT@ !important;
+}
+
+.dash-background,
+#dash .dash-background {
+  background-color: @SURFACE@ !important;
+  border: 1px solid @BORDER_SOFT@ !important;
+  border-radius: 18px !important;
+}
+
+.azTaskbar-BaseIcon {
+  padding: 1px 3px !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 8px !important;
+}
+
+.azTaskbar-favorite { background-color: transparent !important; }
+.azTaskbar-BaseIcon:hover,
+.azTaskbar-BaseIcon:focus { background-color: @HOVER@ !important; }
+
+.blue-ocean-window-border {
+  box-shadow: 0 0 9px 1px @GLOW@ !important;
+}

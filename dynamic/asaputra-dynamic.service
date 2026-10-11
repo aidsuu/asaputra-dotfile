@@ -1,0 +1,12 @@
+[Unit]
+Description=ASAPUTRA wallpaper color sync
+After=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=%h/.local/lib/asaputra-dynamic/theme.py --watch
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=default.target

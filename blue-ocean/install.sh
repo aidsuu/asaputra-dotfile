@@ -34,6 +34,20 @@ else
     first_install=true
 fi
 
+if command -v systemctl >/dev/null; then
+    systemctl --user disable --now asaputra-dynamic.service >/dev/null 2>&1 || true
+fi
+if [[ -f "$state/current" && "$(< "$state/current")" == dynamic ]]; then
+    gtk3_css="$HOME/.config/gtk-3.0/gtk.css"
+    if [[ -e "$backup/gtk3-css" || -e "$backup/gtk3-css.absent" ]]; then
+        rm -f -- "$gtk3_css"
+        if [[ -e "$backup/gtk3-css" ]]; then
+            mkdir -p "$(dirname -- "$gtk3_css")"
+            cp -a -- "$backup/gtk3-css" "$gtk3_css"
+        fi
+    fi
+fi
+
 for app in gsettings dconf; do
     command -v "$app" >/dev/null || { echo "Missing required command: $app" >&2; exit 1; }
 done

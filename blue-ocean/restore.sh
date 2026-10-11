@@ -5,6 +5,9 @@ state="${XDG_STATE_HOME:-$HOME/.local/state}/blue-ocean-gnome"
 [[ -f "$state/latest" ]] || { echo 'No Blue Ocean backup found.' >&2; exit 1; }
 backup="$(< "$state/latest")"
 [[ -d "$backup" ]] || { echo "Backup directory is missing: $backup" >&2; exit 1; }
+if command -v systemctl >/dev/null; then
+    systemctl --user disable --now asaputra-dynamic.service >/dev/null 2>&1 || true
+fi
 
 for entry in \
     'interface:/org/gnome/desktop/interface/' \
@@ -74,6 +77,11 @@ for entry in \
 done
 for entry in \
     "colloid-theme:$HOME/.themes/Colloid-Dark-Compact-Nord" \
+    "dynamic-theme:$HOME/.themes/Dynamic" \
+    "dynamic-runtime:$HOME/.local/lib/asaputra-dynamic" \
+    "dynamic-service:$HOME/.config/systemd/user/asaputra-dynamic.service" \
+    "dynamic-palette:$HOME/.config/blue-ocean/dynamic-palette.json" \
+    "gtk3-css:$HOME/.config/gtk-3.0/gtk.css" \
     "gtk4-css:$HOME/.config/gtk-4.0/gtk.css" \
     "gtk4-dark-css:$HOME/.config/gtk-4.0/gtk-dark.css" \
     "gtk4-assets:$HOME/.config/gtk-4.0/assets"; do
@@ -98,6 +106,9 @@ for entry in \
         restore_file "$name" "$target"
     fi
 done
+if command -v systemctl >/dev/null; then
+    systemctl --user daemon-reload
+fi
 echo "Settings restored from $backup"
 rm -f -- "$state/current"
 echo 'Sign out and back in if the Shell appearance has not fully changed.'
