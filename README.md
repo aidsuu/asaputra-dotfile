@@ -8,7 +8,7 @@
 | Deep navy, muted cyan, and moonlit water | Dark plum, dusty rose, and cherry blossoms at dusk |
 | <img src="blue-ocean/wallpaper/blue-ocean-v2.png" alt="Blue Ocean wallpaper" width="440"> | <img src="sakura/wallpaper/sakura-dusk.png" alt="Sakura wallpaper" width="440"> |
 
-Both schemes put small icons for favorite and running apps in the slim top panel. The separate dock is hidden, including in the app overview. Press `Super` to search or browse all apps. Menus and windows use flat surfaces with thin borders instead of heavy rectangular shadows. Each scheme coordinates the wallpaper, GNOME Shell, Colloid GTK, Kitty, Bash prompt, Fastfetch, cursor, and Kitty window outline. The Kitty outline stays subtle and follows focus.
+Both schemes put small icons for favorite and running apps in the slim top panel. The separate dock is hidden, including in the app overview. Press `Super` to search or browse all apps. Blur stays in the overview; popup blur is disabled so rounded OSDs do not sit on a square blur layer. Each scheme coordinates the wallpaper, GNOME Shell, Colloid GTK, Kitty, Bash prompt, Fastfetch, cursor, and Kitty window outline. The Kitty outline stays subtle and follows focus.
 
 ## Install and switch
 

@@ -150,6 +150,8 @@ dconf write "$blur/panel/override-background" 'false'
 dconf write "$blur/dash-to-dock/blur" 'false'
 dconf write "$blur/dash-to-dock/override-background" 'false'
 dconf write "$blur/overview/blur" 'true'
+# Popup blur paints a square layer behind rounded GNOME OSDs on this setup.
+dconf write "$blur/popup/blur" 'false'
 
 bar=/org/gnome/shell/extensions/openbar
 if [[ "$scheme" == sakura ]]; then
@@ -182,8 +184,8 @@ dconf write "$bar/balpha" '0.55'
 dconf write "$bar/bwidth" '1.0'
 dconf write "$bar/bradius" '13.0'
 dconf write "$bar/neon" 'false'
-dconf write "$bar/shadow" 'false'
-dconf write "$bar/shalpha" '0.0'
+dconf write "$bar/shadow" 'true'
+dconf write "$bar/shalpha" '0.24'
 dconf write "$bar/hcolor" "$bar_hcolor"
 dconf write "$bar/dark-hcolor" "$bar_hcolor"
 dconf write "$bar/halpha" '0.27'

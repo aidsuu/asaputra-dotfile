@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
-
 case "${1:-blue-ocean}" in
     blue-ocean)
         gtk_variant=default
@@ -87,6 +85,3 @@ rm -rf -- "$HOME/.config/gtk-4.0/assets" \
     "$HOME/.config/gtk-4.0/gtk.css" "$HOME/.config/gtk-4.0/gtk-dark.css"
 cp -a -- "$temp/home/.config/gtk-4.0/assets" "$HOME/.config/gtk-4.0/"
 cp -- "$temp/home/.config/gtk-4.0/gtk.css" "$HOME/.config/gtk-4.0/gtk.css"
-cat -- "$root/gtk/shadowless-gtk3.css" >> "$target/gtk-3.0/gtk.css"
-cat -- "$root/gtk/shadowless-gtk4.css" >> "$target/gtk-4.0/gtk.css"
-cat -- "$root/gtk/shadowless-gtk4.css" >> "$HOME/.config/gtk-4.0/gtk.css"

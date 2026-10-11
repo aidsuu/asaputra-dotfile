@@ -24,10 +24,6 @@ stage {
   background-color: rgba(169, 105, 136, 0.22) !important;
 }
 
-.azTaskbar-Tooltip {
-  box-shadow: none !important;
-}
-
 /* Menus and popovers use a layered plum glass surface. */
 .popup-menu-content,
 .candidate-popup-content,
@@ -38,7 +34,7 @@ stage {
   background-color: rgba(29, 21, 35, 0.98) !important;
   border: 1px solid rgba(194, 136, 163, 0.23) !important;
   border-radius: 22px !important;
-  box-shadow: none !important;
+  box-shadow: 0 18px 48px rgba(9, 5, 14, 0.48) !important;
   color: #f2e5ec !important;
 }
 
@@ -154,7 +150,7 @@ stage {
   background-color: rgba(38, 25, 42, 0.98) !important;
   border: 1px solid rgba(200, 136, 166, 0.29) !important;
   border-radius: 17px !important;
-  box-shadow: none !important;
+  box-shadow: 0 12px 36px rgba(9, 5, 14, 0.43) !important;
 }
 
 /* Search and app overview. */
@@ -163,7 +159,7 @@ stage {
   border: 1px solid rgba(203, 143, 171, 0.40) !important;
   border-radius: 17px !important;
   color: #f5e9ee !important;
-  box-shadow: none !important;
+  box-shadow: 0 8px 28px rgba(13, 6, 18, 0.28) !important;
 }
 
 .search-entry:focus {
@@ -200,7 +196,7 @@ stage {
   background-color: rgba(29, 21, 35, 0.87) !important;
   border: 1px solid rgba(190, 131, 160, 0.23) !important;
   border-radius: 19px !important;
-  box-shadow: none !important;
+  box-shadow: 0 10px 30px rgba(12, 5, 17, 0.35) !important;
 }
 
 .workspace-thumbnail-indicator {
@@ -222,7 +218,7 @@ stage {
   border: 1px solid rgba(194, 136, 163, 0.23) !important;
   border-radius: 20px !important;
   color: #f2e5ec !important;
-  box-shadow: none !important;
+  box-shadow: 0 18px 48px rgba(9, 5, 14, 0.43) !important;
 }
 
 .button,
