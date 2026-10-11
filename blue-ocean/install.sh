@@ -25,6 +25,7 @@ case "$scheme" in
     *) echo "Unknown color scheme: $scheme" >&2; exit 1 ;;
 esac
 state="${XDG_STATE_HOME:-$HOME/.local/state}/blue-ocean-gnome"
+source "$root/transaction.sh"
 mkdir -p "$state/backups"
 if [[ -f "$state/latest" ]] && [[ -d "$(< "$state/latest")" ]]; then
     backup="$(< "$state/latest")"
@@ -34,26 +35,11 @@ else
     first_install=true
 fi
 
-if command -v systemctl >/dev/null; then
-    systemctl --user disable --now asaputra-dynamic.service >/dev/null 2>&1 || true
-fi
-if [[ -f "$state/current" && "$(< "$state/current")" == dynamic ]]; then
-    gtk3_css="$HOME/.config/gtk-3.0/gtk.css"
-    if [[ -e "$backup/gtk3-css" || -e "$backup/gtk3-css.absent" ]]; then
-        rm -f -- "$gtk3_css"
-        if [[ -e "$backup/gtk3-css" ]]; then
-            mkdir -p "$(dirname -- "$gtk3_css")"
-            cp -a -- "$backup/gtk3-css" "$gtk3_css"
-        fi
-    fi
-fi
-
-for app in gsettings dconf; do
+for app in gsettings dconf python3 glib-compile-schemas; do
     command -v "$app" >/dev/null || { echo "Missing required command: $app" >&2; exit 1; }
 done
 [[ "$(gnome-shell --version)" == *' 48.'* ]] || { echo 'This setup requires GNOME Shell 48.' >&2; exit 1; }
 [[ -f "$wallpaper_source" ]] || { echo "$scheme wallpaper is missing." >&2; exit 1; }
-mkdir -p "$HOME/.themes" "$HOME/.local/share/backgrounds" "$HOME/.config/kitty" "$HOME/.config/fastfetch" "$HOME/.config/blue-ocean"
 
 if "$first_install"; then
     for entry in \
@@ -82,8 +68,6 @@ done
     dconf dump /org/gnome/shell/extensions/p7-borders/ > "$backup/p7-borders.dconf"
 [[ -f "$backup/shell-enabled-extensions" ]] || \
     gsettings get org.gnome.shell enabled-extensions > "$backup/shell-enabled-extensions"
-"$root/install-components.sh" "$backup"
-
 backup_file() {
     local name="$1" target="$2"
     if [[ -e "$backup/$name" || -e "$backup/$name.absent" ]]; then
@@ -111,6 +95,52 @@ backup_file colloid-pink-theme "$HOME/.themes/Colloid-Pink-Dark-Compact"
 backup_file gtk4-css "$HOME/.config/gtk-4.0/gtk.css"
 backup_file gtk4-dark-css "$HOME/.config/gtk-4.0/gtk-dark.css"
 backup_file gtk4-assets "$HOME/.config/gtk-4.0/assets"
+backup_file gtk3-css "$HOME/.config/gtk-3.0/gtk.css"
+backup_file dynamic-theme "$HOME/.themes/Dynamic"
+backup_file dynamic-runtime "$HOME/.local/lib/asaputra-dynamic"
+backup_file dynamic-service "$HOME/.config/systemd/user/asaputra-dynamic.service"
+backup_file dynamic-palette "$HOME/.config/blue-ocean/dynamic-palette.json"
+"$root/install-components.sh" "$backup" --backup-only
+if "$first_install"; then
+    printf '%s\n' "$backup" > "$state/latest"
+fi
+
+desktop_snapshot
+desktop_transaction_traps
+mkdir -p "$HOME/.themes" "$HOME/.local/share/backgrounds" "$HOME/.config/kitty" "$HOME/.config/fastfetch" "$HOME/.config/blue-ocean"
+if command -v systemctl >/dev/null; then
+    if systemctl --user is-active --quiet asaputra-dynamic.service; then
+        systemctl --user stop asaputra-dynamic.service
+    fi
+    if systemctl --user is-enabled --quiet asaputra-dynamic.service; then
+        systemctl --user disable asaputra-dynamic.service
+    fi
+fi
+if [[ -f "$state/current" && "$(< "$state/current")" == dynamic ]]; then
+    gtk3_css="$HOME/.config/gtk-3.0/gtk.css"
+    if [[ -e "$backup/gtk3-css" || -e "$backup/gtk3-css.absent" ]]; then
+        rm -f -- "$gtk3_css"
+        if [[ -e "$backup/gtk3-css" ]]; then
+            mkdir -p "$(dirname -- "$gtk3_css")"
+            cp -a -- "$backup/gtk3-css" "$gtk3_css"
+        fi
+    fi
+fi
+"$root/install-components.sh" "$backup"
+# Some User Themes builds retain a queued callback after disable(). Ignore it
+# once its settings object has been cleared; the original extension is backed up.
+python3 - "$HOME/.local/share/gnome-shell/extensions/user-theme@gnome-shell-extensions.gcampax.github.com/extension.js" <<'PY'
+from pathlib import Path
+import sys
+
+path = Path(sys.argv[1])
+if path.is_file():
+    source = path.read_text()
+    original = '        let themeName = this._settings.get_string(SETTINGS_KEY);'
+    guarded = '        if (!this._settings)\n            return;\n' + original
+    if original in source and guarded not in source:
+        path.write_text(source.replace(original, guarded, 1))
+PY
 "$root/install-gtk.sh" "$scheme"
 rm -rf -- "$HOME/.themes/$shell_theme"
 cp -a -- "$theme_root/theme" "$HOME/.themes/$shell_theme"
@@ -290,9 +320,7 @@ if command -v gnome-extensions >/dev/null && \
     gnome-extensions disable dash-to-panel@jderose9.github.com
 fi
 
-if "$first_install"; then
-    printf '%s\n' "$backup" > "$state/latest"
-fi
 printf '%s\n' "$scheme" > "$state/current"
+desktop_commit
 echo "$shell_theme installed. Backup: $backup"
 echo 'Sign out and back in if Open Bar does not appear immediately on GNOME Wayland.'

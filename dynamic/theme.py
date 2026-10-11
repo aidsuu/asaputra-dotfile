@@ -3,6 +3,7 @@
 
 import argparse
 import colorsys
+from datetime import datetime
 import json
 import math
 import os
@@ -10,13 +11,15 @@ from pathlib import Path
 import subprocess
 import sys
 import tempfile
+import time
 from urllib.parse import unquote, urlparse
 import xml.etree.ElementTree as ET
 
 import gi
 
 gi.require_version('Gio', '2.0')
-from gi.repository import Gio, GLib
+gi.require_version('GdkPixbuf', '2.0')
+from gi.repository import GdkPixbuf, Gio, GLib
 from PIL import Image
 
 
@@ -26,6 +29,17 @@ ACCENTS = {
     'red': 0, 'orange': 28, 'yellow': 51, 'green': 130,
     'teal': 177, 'blue': 215, 'purple': 268, 'pink': 328,
     'slate': 210,
+}
+CURSOR_THEMES = {
+    'red': 'Bibata-Material-Salmon',
+    'orange': 'Bibata-Material-Apricot',
+    'yellow': 'Bibata-Material-Sand',
+    'green': 'Bibata-Material-Moss',
+    'teal': 'Bibata-Material-Teal',
+    'blue': 'Bibata-Material-Deep-Blue',
+    'purple': 'Bibata-Material-Lilac',
+    'pink': 'Bibata-Material-Pink-Pastel',
+    'slate': 'Bibata-Material-Slate',
 }
 
 
@@ -47,31 +61,94 @@ def luminance(color):
     return 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2]
 
 
-def local_image(uri):
+def contrast(a, b):
+    lighter, darker = sorted((luminance(a), luminance(b)), reverse=True)
+    return (lighter + 0.05) / (darker + 0.05)
+
+
+def cursor_theme(accent_name):
+    name = CURSOR_THEMES[accent_name]
+    search_roots = (HOME / '.icons', HOME / '.local/share/icons',
+                    Path(os.environ.get('XDG_DATA_HOME', HOME / '.local/share')) / 'icons',
+                    Path('/usr/share/icons'))
+    if any((root / name / 'index.theme').is_file() and
+           (root / name / 'cursors').is_dir() for root in search_roots):
+        return name
+    return 'Adwaita'
+
+
+def slideshow_image(path, now=None):
+    root = ET.parse(path).getroot()
+    start = root.find('starttime')
+    if start is None:
+        raise ValueError(f'Wallpaper slideshow has no start time: {path}')
+    fields = [int(start.findtext(name)) for name in
+              ('year', 'month', 'day', 'hour', 'minute', 'second')]
+    started = datetime(*fields).timestamp()
+    frames = []
+    def frame_path(node, name):
+        element = node.find(name)
+        if element is None:
+            return None
+        return next((item.text.strip() for item in element.iter()
+                     if item.text and item.text.strip()), None)
+
+    for node in root:
+        if node.tag not in ('static', 'transition'):
+            continue
+        duration = float(node.findtext('duration', '0'))
+        if duration <= 0:
+            continue
+        if node.tag == 'static':
+            image = frame_path(node, 'file')
+        else:
+            image = (frame_path(node, 'from'), frame_path(node, 'to'))
+        if image:
+            frames.append((duration, image))
+    if not frames:
+        raise ValueError(f'No images found in wallpaper slideshow: {path}')
+    elapsed = ((time.time() if now is None else now) - started) % sum(
+        duration for duration, _ in frames)
+    for duration, image in frames:
+        if elapsed < duration:
+            name = image[0] if isinstance(image, tuple) and elapsed < duration / 2 else (
+                image[1] if isinstance(image, tuple) else image)
+            if name is None:
+                raise ValueError(f'Incomplete wallpaper frame in {path}')
+            if name.startswith('file://'):
+                return Path(unquote(urlparse(name).path))
+            target = Path(name.strip())
+            return target if target.is_absolute() else path.parent / target
+        elapsed -= duration
+    raise RuntimeError('Could not locate the current wallpaper frame')
+
+
+def local_image(uri, now=None):
     parsed = urlparse(uri)
     if parsed.scheme != 'file':
         raise ValueError(f'Only local file wallpapers are supported: {uri}')
     path = Path(unquote(parsed.path))
     if path.suffix.lower() == '.xml':
-        root = ET.parse(path).getroot()
-        name = next((node.text for node in root.iter()
-                     if node.tag in ('file', 'to', 'from') and node.text), None)
-        if not name:
-            raise ValueError(f'No image found in wallpaper slideshow: {path}')
-        path = Path(name.strip())
+        path = slideshow_image(path, now)
     if not path.is_file():
         raise FileNotFoundError(path)
     return path
 
 
 def image_palette(path, dark):
-    with Image.open(path) as source:
-        image = source.convert('RGB')
-        image.thumbnail((160, 160), Image.Resampling.LANCZOS)
-        quantized = image.quantize(colors=16, method=Image.Quantize.MEDIANCUT)
-        table = quantized.getpalette()
-        colors = [(count, tuple(table[index * 3:index * 3 + 3]))
-                  for count, index in quantized.getcolors()]
+    if path.suffix.lower() == '.svg':
+        pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(str(path), 160, 160, True)
+        mode = 'RGBA' if pixbuf.get_has_alpha() else 'RGB'
+        image = Image.frombytes(mode, (pixbuf.get_width(), pixbuf.get_height()),
+                                pixbuf.get_pixels(), 'raw', mode, pixbuf.get_rowstride())
+    else:
+        with Image.open(path) as source:
+            image = source.convert('RGB')
+            image.thumbnail((160, 160), Image.Resampling.LANCZOS)
+    quantized = image.convert('RGB').quantize(colors=16, method=Image.Quantize.MEDIANCUT)
+    table = quantized.getpalette()
+    colors = [(count, tuple(table[index * 3:index * 3 + 3]))
+              for count, index in quantized.getcolors()]
     colors.sort(reverse=True)
     total = sum(count for count, _ in colors)
     dominant = tuple(round(sum(count * color[channel] for count, color in colors) / total)
@@ -123,6 +200,7 @@ def image_palette(path, dark):
 
     return {
         'wallpaper': str(path), 'dark': dark, 'accent_name': accent_name,
+        'cursor_theme': cursor_theme(accent_name),
         'accent': accent, 'accent_fg': accent_fg, 'background': background,
         'surface': surface, 'card': card, 'foreground': foreground,
         'border': mix(surface, accent, 0.6),
@@ -238,14 +316,27 @@ def render_kitty(palette):
             muted, (229, 137, 143), (148, 206, 168), (228, 199, 133),
             mix(accent, (255, 255, 255), 0.23), (198, 165, 219),
             (143, 211, 220), (255, 255, 255)]
+    # ANSI black and bright white are still used as text by terminal programs.
+    # Keep every ANSI text color readable over either wallpaper-derived surface.
+    def readable(color):
+        while contrast(color, background) < 4.5:
+            color = mix(color, foreground, 0.2)
+        return color
+
+    ansi = [readable(color) for color in ansi]
     lines.extend(f'color{index} {hex_color(color)}' for index, color in enumerate(ansi))
     lines.extend([
         'hide_window_decorations yes', 'remember_window_size no',
         'initial_window_width 960', 'initial_window_height 560',
         'window_padding_width 24', 'placement_strategy center',
-        f'background_image {palette["wallpaper"]}',
-        'background_image_layout cscaled', 'background_image_linear yes',
-        f'background_tint {"0.91" if palette["dark"] else "0.94"}',
+    ])
+    if Path(palette['wallpaper']).suffix.lower() != '.svg':
+        lines.extend([
+            f'background_image {palette["wallpaper"]}',
+            'background_image_layout cscaled', 'background_image_linear yes',
+            f'background_tint {"0.91" if palette["dark"] else "0.94"}',
+        ])
+    lines.extend([
         'background_opacity 1.0', 'tab_bar_style powerline',
         'tab_bar_min_tabs 2', 'tab_powerline_style round',
         f'active_tab_background {hex_color(mix(card, accent, 0.24))}',
@@ -306,17 +397,26 @@ def apply_palette(palette, interface):
 
     interface.set_string('gtk-theme', 'Adwaita-dark' if palette['dark'] else 'Adwaita')
     interface.set_string('accent-color', palette['accent_name'])
+    interface.set_string('cursor-theme', palette['cursor_theme'])
 
     bar = extension_settings('openbar@neuromorph', 'org.gnome.shell.extensions.openbar')
     bar.delay()
     for key, color in {
+        'bgcolor': palette['background'],
+        'bgcolor2': palette['surface'],
+        'bgcolor-wmax': palette['background'],
+        'boxcolor': palette['background'],
         'iscolor': palette['surface'], 'dark-iscolor': palette['surface'],
         'fgcolor': palette['foreground'], 'dark-fgcolor': palette['foreground'],
         'bcolor': palette['border'], 'dark-bcolor': palette['border'],
         'hcolor': palette['accent'], 'dark-hcolor': palette['accent'],
+        'accent-color': palette['accent'],
     }.items():
         bar.set_strv(key, [f'{channel / 255:.4f}' for channel in color])
     bar.set_boolean('autotheme-refresh', False)
+    # OpenBar does not regenerate its runtime CSS when individual color keys
+    # change. Without this toggle, the panel keeps the previous wallpaper's CSS.
+    bar.set_boolean('trigger-reload', not bar.get_boolean('trigger-reload'))
     bar.apply()
 
     taskbar = extension_settings('aztaskbar@aztaskbar.gitlab.com',
@@ -347,33 +447,58 @@ def main():
     args = parser.parse_args()
     background = Gio.Settings.new('org.gnome.desktop.background')
     interface = Gio.Settings.new('org.gnome.desktop.interface')
+    last_signature = None
 
     def update():
+        nonlocal last_signature
         path, dark = active_wallpaper(background, interface)
+        signature = (path, dark, path.stat().st_mtime_ns, path.stat().st_size)
+        if not args.preview and signature == last_signature:
+            return path
         palette = image_palette(path, dark)
         if args.preview:
             print(json.dumps({**palette, 'accent_hex': hex_color(palette['accent'])}, indent=2))
         else:
             apply_palette(palette, interface)
+            last_signature = signature
         return path
 
     if not args.watch:
         update()
         return
 
-    current_monitor = None
+    current_monitors = []
     timeout_id = 0
+    slideshow_timeout = 0
+
+    def slideshow_tick():
+        nonlocal slideshow_timeout
+        slideshow_timeout = 0
+        schedule()
+        return GLib.SOURCE_REMOVE
 
     def refresh():
-        nonlocal current_monitor, timeout_id
+        nonlocal current_monitors, timeout_id, slideshow_timeout
         timeout_id = 0
+        dark = interface.get_string('color-scheme') == 'prefer-dark'
+        uri = background.get_string('picture-uri-dark' if dark else 'picture-uri') or \
+            background.get_string('picture-uri')
+        source = Path(unquote(urlparse(uri).path))
+        if slideshow_timeout:
+            GLib.source_remove(slideshow_timeout)
+            slideshow_timeout = 0
+        if source.suffix.lower() == '.xml':
+            slideshow_timeout = GLib.timeout_add_seconds(30, slideshow_tick)
         try:
             path = update()
-            if current_monitor is not None:
-                current_monitor.cancel()
-            current_monitor = Gio.File.new_for_path(str(path)).monitor_file(
-                Gio.FileMonitorFlags.NONE, None)
-            current_monitor.connect('changed', schedule)
+            for monitor in current_monitors:
+                monitor.cancel()
+            current_monitors = []
+            for watched in {path, source}:
+                monitor = Gio.File.new_for_path(str(watched)).monitor_file(
+                    Gio.FileMonitorFlags.NONE, None)
+                monitor.connect('changed', schedule)
+                current_monitors.append(monitor)
         except Exception as error:
             print(f'Dynamic wallpaper update failed: {error}', file=sys.stderr, flush=True)
         return GLib.SOURCE_REMOVE

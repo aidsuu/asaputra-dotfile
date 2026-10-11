@@ -95,6 +95,7 @@ for entry in \
     "dock-extension:$HOME/.local/share/gnome-shell/extensions/dash-to-dock@micxgx.gmail.com" \
     "blur-extension:$HOME/.local/share/gnome-shell/extensions/blur-my-shell@aunetx" \
     "openbar-extension:$HOME/.local/share/gnome-shell/extensions/openbar@neuromorph" \
+    "user-theme-extension:$HOME/.local/share/gnome-shell/extensions/user-theme@gnome-shell-extensions.gcampax.github.com" \
     "p7-borders-extension:$HOME/.local/share/gnome-shell/extensions/p7-borders@prasannavl.com" \
     "app-icons-taskbar-extension:$HOME/.local/share/gnome-shell/extensions/aztaskbar@aztaskbar.gitlab.com" \
     "papirus:$HOME/.local/share/icons/Papirus" \

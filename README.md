@@ -10,7 +10,7 @@
 
 Both schemes put small icons for favorite and running apps in the slim top panel. The separate dock is hidden, including in the app overview. Press `Super` to search or browse all apps. Blur stays in the overview; popup blur is disabled so rounded OSDs do not sit on a square blur layer. Each scheme coordinates the wallpaper, GNOME Shell, Colloid GTK, Kitty, Bash prompt, Fastfetch, cursor, and Kitty window outline. The Kitty outline stays subtle and follows focus.
 
-**Dynamic** keeps your current wallpaper and derives a coordinated palette from it. It updates GNOME Shell, Open Bar, the nearest GNOME accent, GTK, Kitty, Fastfetch, the Bash prompt, and the Kitty outline when the wallpaper changes. The small top panel and dock-free layout stay the same.
+**Dynamic** keeps your current wallpaper and derives a coordinated palette from it. It updates GNOME Shell, Open Bar, the nearest GNOME accent and installed Bibata cursor, GTK, Kitty, Fastfetch, the Bash prompt, and the Kitty outline when the wallpaper changes. If the matching Bibata cursor is unavailable, it uses Adwaita. Local SVG wallpapers and timed XML slideshows are supported; slideshow colors follow the visible frame within about 30 seconds. The small top panel and dock-free layout stay the same.
 
 ## Install and switch
 
@@ -22,7 +22,7 @@ cd asaputra-dotfile
 ./dynamic/install.sh     # Follow the active wallpaper
 ```
 
-Run any installer again to switch schemes. All profiles use one original-settings backup at `~/.local/state/blue-ocean-gnome/backups/`, so switching does not replace your pre-install snapshot. Dynamic watches local wallpaper files through a user service and needs `python3-pil` and `python3-gi`. Already-open GTK and Kitty windows may need to be reopened after a wallpaper change. The installer runs in your user account; Debian amd64 does not require `sudo`. It downloads pinned sources and Debian packages, so an internet connection is required. Sign out and back in if a newly installed GNOME extension does not appear immediately.
+Run any installer again to switch schemes. All profiles use one original-settings backup at `~/.local/state/blue-ocean-gnome/backups/`, so switching does not replace your pre-install snapshot. Each switch also saves the current profile temporarily and restores it automatically if installation fails. Dynamic watches local wallpaper files through a user service and needs `python3-pil`, `python3-gi`, and the GdkPixbuf SVG loader. Already-open GTK and Kitty windows may need to be reopened after a wallpaper change. The installer runs in your user account; Debian amd64 does not require `sudo`. It downloads pinned sources and Debian packages, so an internet connection is required. Sign out and back in if a newly installed GNOME extension does not appear immediately.
 
 ## Restore your original desktop
 

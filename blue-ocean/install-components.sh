@@ -4,7 +4,6 @@ set -euo pipefail
 backup="${1:?Lokasi snapshot diperlukan}"
 extensions="$HOME/.local/share/gnome-shell/extensions"
 icons="$HOME/.local/share/icons"
-mkdir -p "$extensions" "$icons"
 
 record_path() {
     local name="$1" target="$2"
@@ -22,9 +21,13 @@ record_path blur-extension "$extensions/blur-my-shell@aunetx"
 record_path openbar-extension "$extensions/openbar@neuromorph"
 record_path p7-borders-extension "$extensions/p7-borders@prasannavl.com"
 record_path app-icons-taskbar-extension "$extensions/aztaskbar@aztaskbar.gitlab.com"
+record_path user-theme-extension "$extensions/user-theme@gnome-shell-extensions.gcampax.github.com"
 record_path papirus "$icons/Papirus"
 record_path papirus-dark "$icons/Papirus-Dark"
 record_path papirus-light "$icons/Papirus-Light"
+
+[[ "${2:-}" != --backup-only ]] || exit 0
+mkdir -p "$extensions" "$icons"
 
 for app in python3 glib-compile-schemas; do
     command -v "$app" >/dev/null || { echo "Missing required command: $app" >&2; exit 1; }
